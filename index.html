@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alan Mori Abrams — Portfolio</title>
+
+<!-- ============================================================
+     ★★★  ADD YOUR PROJECTS HERE  ★★★
+     ------------------------------------------------------------
+     To add a project: copy one { ... } block, paste it at the
+     TOP of the list, edit the fields, save, refresh the page.
+
+     Fields:
+       title    — project name (required)
+       desc     — 1–3 sentence description (required)
+       tags     — list of tech used, shows as chips + powers the filter
+       github   — repo link ("" to hide the button)
+       demo     — live demo link ("" to hide the button)
+       image    — path/URL to a screenshot ("" = auto gradient cover)
+       featured — true puts a ⭐ badge and sorts it first
+     ============================================================ -->
+<script>
+const PROJECTS = [
+  {
+    title: "Example: Pathfinding Visualizer",
+    desc: "Interactive grid that animates Dijkstra, A*, and BFS in real time. Built to understand graph algorithms visually.",
+    tags: ["JavaScript", "Algorithms"],
+    github: "https://github.com/yourusername/pathfinding-visualizer",
+    demo: "",
+    image: "",
+    featured: true
+  },
+  {
+    title: "Example: Matrix Calculator",
+    desc: "CLI tool for matrix operations — RREF, determinants, eigenvalues — with step-by-step output.",
+    tags: ["Python", "Math"],
+    github: "https://github.com/yourusername/matrix-calc",
+    demo: "",
+    image: "",
+    featured: false
+  },
+  {
+    title: "Example: Course Planner",
+    desc: "Web app that builds conflict-free semester schedules using constraint satisfaction.",
+    tags: ["React", "CS"],
+    github: "",
+    demo: "https://example.com",
+    image: "",
+    featured: false
+  }
+];
+
+/* ---- Edit these too ---- */
+const SKILLS = {
+  "Languages":    ["Python", "Java", "GDScript", "C++"],
+  "Web & Tools":  ["VMWare", "Git", "Linux", "AutoMod", "Cisco Packet Tracer"],
+  "Math":         ["Linear Algebra", "Probability", "Discrete Math", "Numerical Methods", "Combinatorial Algorithms"]
+};
+
+const PROFILE = {
+  name: "Alan Mori Abrams",
+  tagline: "CS & Math Student",
+  about: "I'm a Computer Science and Mathematics student who is pursuing the field of Information Technology to then move into Cyber Security ",
+  email: "Alan.mori.abrams@gmail.com",
+  github: "https://github.com/AlanMoriAbrams",
+  linkedin: "https://linkedin.com/in/alan-mori-abrams-552b79216/",
+  resume: "Alan_Mori_Abrams_Resume (1) copy.pdf"   // put resume.pdf next to this file, or paste a URL
+};
+</script>
+<!-- ★★★  END OF EDITABLE SECTION — no need to touch anything below  ★★★ -->
+
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #10151f;
+  --card: #141b26;
+  --border: #1f2937;
+  --text: #d6deeb;
+  --muted: #7d8799;
+  --accent: #22d3ee;
+  --accent2: #a78bfa;
+  --mono: "SF Mono", "Fira Code", Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* ---------- Nav ---------- */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 7vw;
+  background: rgba(10,14,20,.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { font-family: var(--mono); color: var(--accent); font-weight: 700; text-decoration: none; font-size: 1.05rem; }
+nav ul { display: flex; gap: 26px; list-style: none; }
+nav a { color: var(--text); text-decoration: none; font-size: .92rem; }
+nav a:hover { color: var(--accent); }
+nav .num { color: var(--accent); font-family: var(--mono); font-size: .8rem; margin-right: 4px; }
+
+/* ---------- Hero ---------- */
+header { padding: 110px 7vw 80px; max-width: 1100px; }
+.kicker { font-family: var(--mono); color: var(--accent); margin-bottom: 14px; }
+h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.1; }
+h1 .grad {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.tagline { color: var(--muted); font-size: clamp(1.1rem, 3vw, 1.5rem); margin-top: 8px; }
+.hero-btns { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: 11px 22px; border-radius: 6px;
+  font-family: var(--mono); font-size: .9rem; text-decoration: none;
+  border: 1px solid var(--accent); color: var(--accent); transition: .2s;
+}
+.btn:hover { background: rgba(34,211,238,.1); transform: translateY(-2px); }
+.btn.solid { background: var(--accent); color: #06121a; font-weight: 700; }
+.btn.solid:hover { background: #4be0f5; }
+
+/* ---------- Sections ---------- */
+section { padding: 70px 7vw; max-width: 1100px; margin: 0 auto; }
+h2 { font-size: 1.6rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+h2 .num { font-family: var(--mono); color: var(--accent); font-size: 1.1rem; }
+h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+#about p { color: var(--muted); max-width: 720px; font-size: 1.05rem; }
+
+/* ---------- Skills ---------- */
+.skill-group { margin-bottom: 20px; }
+.skill-group h3 { font-family: var(--mono); font-size: .95rem; color: var(--accent2); margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  padding: 5px 14px; border-radius: 999px; font-size: .85rem; font-family: var(--mono);
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+}
+
+/* ---------- Projects ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.filter {
+  padding: 6px 16px; border-radius: 999px; cursor: pointer; font-family: var(--mono);
+  font-size: .82rem; background: transparent; border: 1px solid var(--border); color: var(--muted); transition: .2s;
+}
+.filter:hover { border-color: var(--accent); color: var(--accent); }
+.filter.active { background: var(--accent); border-color: var(--accent); color: #06121a; font-weight: 700; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; display: flex; flex-direction: column; transition: .25s;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(34,211,238,.08); }
+.cover { height: 150px; background-size: cover; background-position: center; position: relative; }
+.cover .star {
+  position: absolute; top: 10px; right: 10px; background: rgba(10,14,20,.8);
+  border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono);
+  font-size: .7rem; padding: 3px 10px; border-radius: 999px;
+}
+.card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+.card-body h3 { font-size: 1.12rem; margin-bottom: 8px; }
+.card-body p { color: var(--muted); font-size: .92rem; flex: 1; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 12px; }
+.card-tags span { font-family: var(--mono); font-size: .72rem; color: var(--accent2); background: rgba(167,139,250,.1); padding: 3px 10px; border-radius: 999px; }
+.card-links { display: flex; gap: 14px; }
+.card-links a { font-family: var(--mono); font-size: .82rem; color: var(--accent); text-decoration: none; }
+.card-links a:hover { text-decoration: underline; }
+
+/* ---------- Contact / Footer ---------- */
+#contact { text-align: center; }
+#contact h2::after { display: none; }
+#contact h2 { justify-content: center; }
+#contact p { color: var(--muted); max-width: 520px; margin: 0 auto 28px; }
+footer { text-align: center; padding: 30px; color: var(--muted); font-family: var(--mono); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 40px; }
+
+@media (max-width: 640px) { nav ul { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#top">&lt;/&gt;</a>
+  <ul>
+    <li><a href="#about"><span class="num">01.</span>About</a></li>
+    <li><a href="#skills"><span class="num">02.</span>Skills</a></li>
+    <li><a href="#projects"><span class="num">03.</span>Projects</a></li>
+    <li><a href="#contact"><span class="num">04.</span>Contact</a></li>
+    <li><a id="nav-resume" href="#" target="_blank">Resume</a></li>
+  </ul>
+</nav>
+
+<header id="top">
+  <p class="kicker">Hi, my name is</p>
+  <h1><span class="grad" id="hero-name"></span></h1>
+  <p class="tagline" id="hero-tagline"></p>
+  <div class="hero-btns">
+    <a class="btn solid" href="#projects">View Projects</a>
+    <a class="btn" id="hero-resume" href="#" target="_blank">Resume</a>
+  </div>
+</header>
+
+<section id="about">
+  <h2><span class="num">01.</span>About Me</h2>
+  <p id="about-text"></p>
+</section>
+
+<section id="skills">
+  <h2><span class="num">02.</span>Skills</h2>
+  <div id="skills-list"></div>
+</section>
+
+<section id="projects">
+  <h2><span class="num">03.</span>Projects</h2>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="contact">
+  <h2><span class="num">04.</span>Get In Touch</h2>
+  <p>Whether it's a project, an internship, or just a question — my inbox is open.</p>
+  <a class="btn solid" id="email-btn" href="#">Say Hello</a>
+</section>
+
+<footer>Built by <span id="footer-name"></span> · edit PROJECTS in index.html to add work</footer>
+
+<script>
+/* ============ RENDERING — no need to edit ============ */
+
+/* Profile */
+document.getElementById("hero-name").textContent = PROFILE.name;
+document.getElementById("hero-tagline").textContent = PROFILE.tagline;
+document.getElementById("about-text").textContent = PROFILE.about;
+document.getElementById("footer-name").textContent = PROFILE.name;
+document.getElementById("email-btn").href = "mailto:" + PROFILE.email;
+document.getElementById("nav-resume").href = PROFILE.resume;
+document.getElementById("hero-resume").href = PROFILE.resume;
+
+/* Skills */
+const skillsEl = document.getElementById("skills-list");
+for (const [group, items] of Object.entries(SKILLS)) {
+  const div = document.createElement("div");
+  div.className = "skill-group";
+  div.innerHTML = `<h3>// ${group}</h3><div class="chips">` +
+    items.map(s => `<span class="chip">${s}</span>`).join("") + `</div>`;
+  skillsEl.appendChild(div);
+}
+
+/* Projects: featured first, then original order */
+const sorted = [...PROJECTS].sort((a, b) => (b.featured === true) - (a.featured === true));
+
+/* Deterministic gradient cover when no image is given */
+function coverStyle(p) {
+  if (p.image) return `background-image:url('${p.image}')`;
+  let h = 0;
+  for (const c of p.title) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `background:linear-gradient(135deg, hsl(${h},60%,22%), hsl(${(h + 80) % 360},65%,32%))`;
+}
+
+function render(filter) {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  sorted
+    .filter(p => filter === "All" || (p.tags || []).includes(filter))
+    .forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="cover" style="${coverStyle(p)}">${p.featured ? '<span class="star">★ featured</span>' : ""}</div>
+        <div class="card-body">
+          <h3>${p.title}</h3>
+          <p>${p.desc}</p>
+          <div class="card-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
+          <div class="card-links">
+            ${p.github ? `<a href="${p.github}" target="_blank">GitHub ↗</a>` : ""}
+            ${p.demo ? `<a href="${p.demo}" target="_blank">Live Demo ↗</a>` : ""}
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+}
+
+/* Filter buttons built from all tags found in PROJECTS */
+const tags = ["All", ...new Set(PROJECTS.flatMap(p => p.tags || []))];
+const filtersEl = document.getElementById("filters");
+tags.forEach((t, i) => {
+  const b = document.createElement("button");
+  b.className = "filter" + (i === 0 ? " active" : "");
+  b.textContent = t;
+  b.onclick = () => {
+    document.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    render(t);
+  };
+  filtersEl.appendChild(b);
+});
+
+render("All");
+</script>
+</body>
+</html>
