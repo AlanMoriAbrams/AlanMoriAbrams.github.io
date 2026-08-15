@@ -17,6 +17,8 @@
        tags     — list of tech used, shows as chips + powers the filter
        github   — repo link ("" to hide the button)
        demo     — live demo link ("" to hide the button)
+       example  — example video link ("" to hide the button)
+       slideShow — slideshow link ("" to hide the button)
        image    — path/URL to a screenshot ("" = auto gradient cover)
        featured — true puts a ⭐ badge and sorts it first
      ============================================================ -->
@@ -38,6 +40,8 @@ const PROJECTS = [
     tags: ["Python", "Math"],
     github: "https://github.com/yourusername/matrix-calc",
     demo: "videos/AutoModDemo.mp4",
+    example: "",
+    slideShow: "",
     image: "",
     featured: false
   },
@@ -47,6 +51,8 @@ const PROJECTS = [
     tags: ["React", "CS"],
     github: "",
     demo: "https://example.com",
+    example: "",
+    slideShow: "",
     image: "",
     featured: false
   }
@@ -278,6 +284,8 @@ function render(filter) {
           <div class="card-links">
             ${p.github ? `<a href="${p.github}" target="_blank">GitHub ↗</a>` : ""}
             ${p.demo ? `<a href="${p.demo}" target="_blank">Live Demo ↗</a>` : ""}
+            ${p.example ? `<a href="${p.example}" target="_blank">Example Video ↗</a>` : ""}
+            ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow ↗</a>` : ""}
           </div>
         </div>`;
       grid.appendChild(card);
