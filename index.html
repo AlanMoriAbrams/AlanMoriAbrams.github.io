@@ -37,7 +37,7 @@ const PROJECTS = [
   },
   {
     title: "Example: AutoMod Simulation",
-    desc: " Automod is a logistics tool used to simulate transporation of items. I put this on here because this was my onboarding assignment to become a CSUN Student Researcher",
+    desc: "AutoMod is a simulation software used to model manufacturing and logistics systems. For my CSUN research onboarding, I self-taught the software by studying its manual and created a logistics simulation to demonstrate my understanding of its capabilities.",
     tags: ["Python", "Math"],
     github: "https://github.com/yourusername/matrix-calc",
     demo: "",
@@ -47,8 +47,8 @@ const PROJECTS = [
     featured: false
   },
   {
-    title: "Example: Course Planner",
-    desc: "Web app that builds conflict-free semester schedules using constraint satisfaction.",
+    title: "Flame Bound",
+    desc: "Flamebound is a top down 2d round based shooter game where the character tries to survive hoards of enemy bats in order to survive as long as he can. Build this during CSUNS Game Development Clubs 2024 game jam ",
     tags: ["React", "CS"],
     github: "",
     demo: "https://example.com",
@@ -283,10 +283,10 @@ function render(filter) {
           <p>${p.desc}</p>
           <div class="card-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
           <div class="card-links">
-            ${p.github ? `<a href="${p.github}" target="_blank">GitHub ↗</a>` : ""}
-            ${p.demo ? `<a href="${p.demo}" target="_blank">Live Demo ↗</a>` : ""}
-            ${p.example ? `<a href="${p.example}" target="_blank">Example Video ↗</a>` : ""}
-            ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow ↗</a>` : ""}
+            ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>` : ""}
+            ${p.demo ? `<a href="${p.demo}" target="_blank">Live Demo</a>` : ""}
+            ${p.example ? `<a href="${p.example}" target="_blank">Example Video</a>` : ""}
+            ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow</a>` : ""}
           </div>
         </div>`;
       grid.appendChild(card);
