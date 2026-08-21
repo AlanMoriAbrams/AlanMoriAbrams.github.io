@@ -29,7 +29,7 @@ const PROJECTS = [
     desc: " **Beat Boy 3000** is an interactive beat-making app that lets users combine beats, samples, and instruments on a looping timeline to create and experiment with music. Used Next.js and Tone.js in python (Audio is not present in the example)  ", 
     tags: ["Python", "Web development"],
     github: "https://github.com/mateo-codes/beatapp",
-    PLAY: "https://mateocodes.net/beatboy",
+    demo: "https://mateocodes.net/beatboy",
     example: "videos/BeatBoyDemo.mp4",
     slideShow: "https://docs.google.com/presentation/d/1PxlBRJq8mFhrbTEU8CVeMie3IFEXt0ZxfQtLkUk496E/edit?slide=id.g1f87997393_0_782#slide=id.g1f87997393_0_782",
     image: "images/BeatBoyimage.png", 
@@ -329,7 +329,7 @@ function render(filter) {
           <div class="card-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
           <div class="card-links">
             ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>` : ""}
-            ${p.PLAY ? `<a href="${p.PLAY}" target="_blank">Live Demo</a>` : ""}
+            ${p.demo ? `<a href="${p.demo}" target="_blank">PLAY</a>` : ""}
             ${p.example ? `<a href="${p.example}" target="_blank">Example Video</a>` : ""}
             ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow</a>` : ""}
           </div>
