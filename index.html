@@ -199,8 +199,12 @@ header { padding: 110px 7vw 80px; max-width: 1100px; }
    All the actual drawing happens in the renderDotName() function down
    in the script at the bottom - this CSS just sizes/positions it. */
 h1 { line-height: 1.1; margin: 0; }
-.hero-name-wrap { display: block; width: 100%; }
-#hero-canvas { display: block; }
+.hero-name-wrap { display: block; width: 100%; position: relative; }
+/* faint moving ASCII-character texture behind the name (classic demoscene
+   plasma effect, but rendered as text glyphs instead of solid color) -
+   sits underneath the dot-matrix canvas via z-index */
+#hero-plasma { position: absolute; inset: 0; z-index: 0; }
+#hero-canvas { display: block; position: relative; z-index: 1; }
 /* brief RGB-split "glitch" flicker, mostly still, ticks for a moment every few seconds */
 #hero-canvas.glitch { animation: glitchShift 6s infinite; }
 @keyframes glitchShift {
@@ -250,20 +254,15 @@ h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 @keyframes petBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @media (min-width: 900px) { .ascii-pet { display: block; } }
 
-/* little emoji mascots scattered around the page, same idea as the ascii
-   cat above but colorful emoji instead - each one bobs + tilts gently at
-   its own pace (the animation-delay is set inline per pet so they don't
-   all move in sync) */
-.emoji-pet {
-  position: absolute; font-size: 1.7rem; line-height: 1; pointer-events: none;
-  animation: petBobTilt 5s ease-in-out infinite; opacity: .9;
-  display: none;
+/* the spinning ascii donut (classic "donut.c" demo effect) - sits on the
+   opposite side of the cat. Its actual frames are drawn by the JS further
+   down (renderDonut()), this just positions/styles the <pre> it writes into. */
+.ascii-donut {
+  position: absolute; top: 2px; left: 2vw; font-family: var(--mono);
+  font-size: 4.5px; line-height: 1; color: var(--accent2); opacity: .8;
+  white-space: pre; pointer-events: none; display: none;
 }
-@keyframes petBobTilt {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(-8deg); }
-}
-@media (min-width: 900px) { .emoji-pet { display: block; } }
+@media (min-width: 900px) { .ascii-donut { display: block; } }
 
 /* ---------- Skills ---------- */
 .skill-group { margin-bottom: 20px; }
@@ -361,6 +360,7 @@ footer { text-align: center; padding: 30px; color: var(--muted); font-family: va
 <header id="top">
   <p class="term-line"><span class="term-user">alan@portfolio</span> ~ % <span id="term-cmd"></span><span class="term-cursor"></span></p>
   <h1 class="hero-name-wrap" id="hero-name-wrap">
+    <canvas id="hero-plasma" aria-hidden="true"></canvas>
     <canvas id="hero-canvas" class="glitch" role="img"></canvas>
     <span class="sr-only" id="hero-name-sr"></span>
   </h1>
@@ -377,27 +377,39 @@ footer { text-align: center; padding: 30px; color: var(--muted); font-family: va
   <pre class="ascii-pet" style="top: 20px; right: 6vw;" aria-hidden="true"> (•_•)
 &lt;)   )╯
  /    \</pre>
+  <pre class="ascii-donut" id="donut-ascii" aria-hidden="true"></pre>
 </section>
 
 <section id="skills" class="reveal">
   <h2><span class="cmt">//</span> <span class="num">02.</span>Skills</h2>
   <div id="skills-list"></div>
-  <span class="emoji-pet" style="top: 4px; left: 2vw; animation-delay: -1.5s;" aria-hidden="true">🦊</span>
+  <pre class="ascii-pet" style="top: 4px; left: 2vw; animation-delay: -1.5s;" aria-hidden="true">.-""""""-.
+| (=)(=) |
+|   ++   |
+ `------`</pre>
 </section>
 
 <section id="projects" class="reveal">
   <h2><span class="cmt">//</span> <span class="num">03.</span>Projects</h2>
   <div class="filters" id="filters"></div>
   <div class="grid" id="grid"></div>
-  <span class="emoji-pet" style="top: -6px; right: 3vw; animation-delay: -3s;" aria-hidden="true">🦉</span>
+  <pre class="ascii-pet" style="top: -6px; right: 3vw; animation-delay: -3s;" aria-hidden="true">(o)(o)
+ \___/
+ |||||</pre>
 </section>
 
 <section id="contact" class="reveal">
   <h2><span class="cmt">//</span> <span class="num">04.</span>Get In Touch</h2>
   <p>Whether it's a project, an internship, or just a question — my inbox is open.</p>
   <a class="btn solid" id="email-btn" href="#">Say Hello</a>
-  <span class="emoji-pet" style="bottom: 10px; left: 6vw; animation-delay: -0.7s;" aria-hidden="true">🐢</span>
-  <span class="emoji-pet" style="bottom: 10px; right: 6vw; animation-delay: -2.2s;" aria-hidden="true">🐰</span>
+  <pre class="ascii-pet" style="bottom: 10px; left: 6vw; animation-delay: -0.7s;" aria-hidden="true"> _  _
+( \/ )
+ \  /
+  \/</pre>
+  <pre class="ascii-pet" style="bottom: 10px; right: 6vw; animation-delay: -2.2s;" aria-hidden="true"> .--.
+( oo )
+|    |
+ wwww</pre>
 </section>
 
 <footer>Built by <span id="footer-name"></span> · edit PROJECTS in index.html to add work</footer>
@@ -565,6 +577,131 @@ document.getElementById("hero-resume").href = PROFILE.resume;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(layout, 150);
   });
+})();
+
+/* ============ Faint ASCII-text texture behind the hero name ============
+   Same idea as the classic demoscene "plasma" effect - add up a few sine
+   waves that each depend on x, y, and time - but instead of turning the
+   result into a smooth color, it picks a text CHARACTER from a density
+   ramp (space -> . -> : -> * -> # -> @, light to heavy) and prints an
+   actual grid of monospace glyphs. That's what gives it the "faint ASCII
+   art background" look instead of a solid color glow. Very low alpha so
+   it reads as texture behind the name, not something competing with it. */
+(function renderAsciiBg() {
+  const wrap = document.getElementById("hero-name-wrap");
+  const canvas = document.getElementById("hero-plasma");
+  const ctx = canvas.getContext("2d");
+
+  // light -> heavy density ramp; higher plasma values print "heavier" chars
+  const RAMP = " .:-=+*#%@";
+  const CELL = 15; // px per character cell at 1x - keeps the grid chunky/retro
+  let cols = 0, rows = 0, dpr = 1;
+
+  function sizeCanvas() {
+    const cssW = wrap.clientWidth;
+    const cssH = wrap.clientHeight || 1;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.style.width = cssW + "px";
+    canvas.style.height = cssH + "px";
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    cols = Math.ceil(cssW / CELL) + 1;
+    rows = Math.ceil(cssH / CELL) + 1;
+  }
+
+  function frame(t) {
+    const time = t / 1000;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+    ctx.font = "12px " + getComputedStyle(document.body).getPropertyValue("--mono");
+    ctx.textBaseline = "middle";
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x = col * CELL, y = row * CELL;
+        const v =
+          Math.sin(col / 4 + time * 1.1) +
+          Math.sin(row / 3 - time * 0.9) +
+          Math.sin((col + row) / 5 + time * 0.6);
+        // v ranges roughly -3..3 - map to a ramp index, and a soft alpha
+        // so the whole thing stays faint/textural rather than solid
+        const n = (v + 3) / 6; // 0..1
+        const ch = RAMP[Math.max(0, Math.min(RAMP.length - 1, Math.floor(n * RAMP.length)))];
+        const alpha = 0.05 + n * 0.22;
+        ctx.fillStyle = `rgba(124, 92, 255, ${alpha.toFixed(3)})`;
+        ctx.fillText(ch, x, y);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  sizeCanvas();
+  requestAnimationFrame(frame);
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(sizeCanvas, 150);
+  });
+})();
+
+/* ============ Spinning ASCII donut ============
+   The famous "donut.c" trick: math-wise, a torus (donut shape) is just a
+   small circle (the tube) swept around a bigger circle (the ring). We walk
+   both angles in little steps, rotate every resulting point in 3D, then
+   flatten it onto a 2D grid of text characters - using a darker or
+   lighter character depending on how much imaginary light would be
+   hitting that point, which is what makes it read as a solid, shaded 3D
+   shape instead of a flat outline. */
+(function renderDonut() {
+  const el = document.getElementById("donut-ascii");
+  if (!el) return;
+  const W = 50, H = 14;
+  const R1 = 1, R2 = 2, K2 = 5;
+  const K1 = (H * K2 * 3) / (8 * (R1 + R2));
+  const chars = ".,-~:;=!*#$@";
+  let A = 1, B = 1;
+
+  function frame() {
+    const output = new Array(W * H).fill(" ");
+    const zbuffer = new Array(W * H).fill(0);
+    const cosA = Math.cos(A), sinA = Math.sin(A);
+    const cosB = Math.cos(B), sinB = Math.sin(B);
+
+    for (let theta = 0; theta < 2 * Math.PI; theta += 0.07) {
+      const costheta = Math.cos(theta), sintheta = Math.sin(theta);
+      for (let phi = 0; phi < 2 * Math.PI; phi += 0.02) {
+        const cosphi = Math.cos(phi), sinphi = Math.sin(phi);
+        const circlex = R2 + R1 * costheta;
+        const circley = R1 * sintheta;
+
+        const x = circlex * (cosB * cosphi + sinA * sinB * sinphi) - circley * cosA * sinB;
+        const y = circlex * (sinB * cosphi - sinA * cosB * sinphi) + circley * cosA * cosB;
+        const z = K2 + cosA * circlex * sinphi + circley * sinA;
+        const ooz = 1 / z;
+
+        const xp = Math.floor(W / 2 + K1 * ooz * x);
+        const yp = Math.floor(H / 2 - (K1 * ooz * y) / 2);
+        const idx = xp + yp * W;
+
+        const L = cosphi * costheta * sinB - cosA * costheta * sinphi - sinA * sintheta +
+                  cosB * (cosA * sintheta - costheta * sinA * sinphi);
+
+        if (xp >= 0 && xp < W && yp >= 0 && yp < H && L > 0 && ooz > zbuffer[idx]) {
+          zbuffer[idx] = ooz;
+          let lum = Math.floor(L * 8);
+          if (lum > chars.length - 1) lum = chars.length - 1;
+          output[idx] = chars[lum];
+        }
+      }
+    }
+
+    let text = "";
+    for (let row = 0; row < H; row++) text += output.slice(row * W, row * W + W).join("") + "\n";
+    el.textContent = text;
+
+    A += 0.07; B += 0.03;
+    setTimeout(() => requestAnimationFrame(frame), 50); // ~20fps is plenty smooth for this
+  }
+  requestAnimationFrame(frame);
 })();
 
 /* Fade sections in as they scroll into view */
