@@ -1,359 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alan Mori Abrams — Portfolio</title>
-
-<!-- ============================================================
-     ★★★  ADD YOUR PROJECTS HERE  ★★★
-     ------------------------------------------------------------
-     To add a project: copy one { ... } block, paste it at the
-     TOP of the list, edit the fields, save, refresh the page.
-
-     Fields:
-       title    — project name (required)
-       desc     — 1–3 sentence description (required)
-       tags     — list of tech used, shows as chips + powers the filter
-       github   — repo link ("" to hide the button)
-       demo     — live demo link ("" to hide the button)
-       example  — example video link ("" to hide the button)
-       slideShow — slideshow link ("" to hide the button)
-       image    — path/URL to a screenshot ("" = auto gradient cover)
-       featured — true puts a ⭐ badge and sorts it first
-     ============================================================ -->
-<script>
-const PROJECTS = [
-  {
-    title: "Example: BEATBOY 3000",
-    desc: " **Beat Boy 3000** is an interactive beat-making app that lets users combine beats, samples, and instruments on a looping timeline to create and experiment with music. Used Next.js and Tone.js in python (Audio is not present in the example)  ", 
-    tags: ["Python", "Web development"],
-    github: "https://github.com/mateo-codes/beatapp",
-    demo: "https://mateocodes.net/beatboy",
-    example: "videos/BeatBoyDemo.mp4",
-    slideShow: "https://docs.google.com/presentation/d/1PxlBRJq8mFhrbTEU8CVeMie3IFEXt0ZxfQtLkUk496E/edit?slide=id.g1f87997393_0_782#slide=id.g1f87997393_0_782",
-    image: "images/BeatBoyimage.png", 
-    featured: false
-  },
-  {
-    title: "Example: AutoMod Simulation",
-    desc: "AutoMod is a simulation software used to model manufacturing and logistics systems. For my CSUN research onboarding, I self-taught the software by studying its manual and created a logistics simulation to demonstrate my understanding of its capabilities.",
-    tags: ["Python", "Math"],
-    github: "https://github.com/yourusername/matrix-calc",
-    demo: "",
-    example: "videos/AutoModDemo.mp4",
-    slideShow: "",
-    image: "images/AutoModimage.png",
-    featured: false
-  },
-  {
-    title: "Flame Bound",
-    desc: "Flamebound is a top down 2d round based shooter game where the character tries to survive hoards of enemy bats in order to survive as long as he can. Build this during CSUNS Game Development Clubs 2024 game jam ",
-    tags: ["GODOT", "Game Development"],
-    github: "https://github.com/AlanMoriAbrams/Flamebound-main",
-    demo: "https://alanmoriabrams.github.io/FlameBoundDemo/",
-    example: "",
-    slideShow: "",
-    image: "images/Flameboundimage.png",
-    featured: false
-  },
-  {
-    title: "Steam Boat Willie ",
-    desc: "A 2D platformer created in GODOT for CSUNS Game Development Club. This was my first time developing a game with a group ,we encountered GitHub compatibility issues that caused files to be unexpectedly added, deleted, or modified, creating merge conflicts and disrupting our development workflow which resulted in an unfinished game.  ",
-    tags: ["GODOT", "Game Development"],
-    github: "https://github.com/AlanMoriAbrams/SteamBoatWillieDemo",
-    demo: "https://alanmoriabrams.github.io/SteamBoatWillieDemo/?cachebust=1786800000",
-    example: "",
-    slideShow: "",
-    image: "images/SteamBoatWillieimage.png", 
-    featured: false
-  },
-  {
-  title: "Classy Clash ",
-    desc: "A 2D top-down action game built in C++ with the raylib library, featuring tile-based map collision and enemy AI that pursues the player. Learned how to use collision detections and vectors to create hitboxes for the player.",
-    tags: ["C#", "Game Development"],
-    github: "https://github.com/AlanMoriAbrams/ClassyClashDemo",
-    demo: "https://alanmoriabrams.github.io/ClassyClashDemo/",
-    example: "",
-    slideShow: "",
-    image: "images/ClassyClashimage.png", 
-    featured: false
-  },
-  {
-  title: "Unreal 3D Shooter  ",
-    desc: "A 3D Shooter created in Unreal Engine 4 or 5?",
-    tags: ["Unreal Engine", "Game Development" ,"C++"],
-    github: "",
-    demo: "",
-    example: "",
-    slideShow: "",
-    image: "", 
-    featured: false
-  },
-  {
-  title: "Combinatorial Algorithms Research Paper (Math 482 Research Paper)  ",
-    desc: "My Combinatorial Algorithms Math Paper (I wrote the first 4 pages). Developed a combinatorial approach to the 4-cycle detection problem in undirected graphs. The project focused on identifying cycles by analyzing shared neighbors between pairs of vertices, with additional constraints for detecting induced 4-cycles where no diagonal edges exist.",
-    tags: ["Unreal Engine", "Game Development" ,"C++"],
-    github: "",
-    demo: "",
-    example: "images/Math482ResearchPaper.pdf",
-    slideShow: "https://docs.google.com/presentation/d/13ECeHO44ASXo9lA0Se6gGT3HXGJrcX3a8AjghgyIT74/edit?slide=id.g3dd930aef1a_5_23#slide=id.g3dd930aef1a_5_23",
-    image: "images/4Cycleimage.png", 
-    featured: false
-  }
-
-];
-
-/* ---- Edit these too ---- */
-const SKILLS = {
-  "Languages":    ["Python", "Java", "GDScript", "C++"],
-  "Web & Tools":  ["VMWare", "Git", "Linux", "AutoMod", "Cisco Packet Tracer", "GODOT", "Unreal Engine"],
-  "Math":         ["Linear Algebra", "Probability", "Discrete Math", "Calculus 1,2,3", "Combinatorial Algorithms"]
-};
-
-const PROFILE = {
-  name: "Alan Mori Abrams",
-  tagline: "CS & Math Student",
-  about: "I'm a Computer Science and Mathematics student who is pursuing the field of Information Technology to then move into Cyber Security ",
-  email: "Alan.mori.abrams@gmail.com",
-  github: "https://github.com/AlanMoriAbrams",
-  linkedin: "https://linkedin.com/in/alan-mori-abrams-552b79216/",
-  resume: "images/ITResume.pdf",
-};
-</script>
-<!-- ★★★  END OF EDITABLE SECTION — no need to touch anything below  ★★★ -->
-
-<style>
-:root {
-  --bg: #0a0e14;
-  --bg2: #10151f;
-  --card: #141b26;
-  --border: #1f2937;
-  --text: #d6deeb;
-  --muted: #7d8799;
-  --accent: #22d3ee;
-  --accent2: #a78bfa;
-  --mono: "SF Mono", "Fira Code", Consolas, monospace;
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>Flamebound</title>
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
+	/* the game keeps a fixed internal resolution (no in-game camera), so
+	   center that fixed canvas in the browser window instead of letting it
+	   sit flush in the top-left corner on screens larger than the game */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
 }
 
-/* ---------- Nav ---------- */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 7vw;
-  background: rgba(10,14,20,.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
-}
-.logo { font-family: var(--mono); color: var(--accent); font-weight: 700; text-decoration: none; font-size: 1.05rem; }
-nav ul { display: flex; gap: 26px; list-style: none; }
-nav a { color: var(--text); text-decoration: none; font-size: .92rem; }
-nav a:hover { color: var(--accent); }
-nav .num { color: var(--accent); font-family: var(--mono); font-size: .8rem; margin-right: 4px; }
-
-/* ---------- Hero ---------- */
-header { padding: 110px 7vw 80px; max-width: 1100px; }
-.kicker { font-family: var(--mono); color: var(--accent); margin-bottom: 14px; }
-h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.1; }
-h1 .grad {
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.tagline { color: var(--muted); font-size: clamp(1.1rem, 3vw, 1.5rem); margin-top: 8px; }
-.hero-btns { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
-.btn {
-  display: inline-block; padding: 11px 22px; border-radius: 6px;
-  font-family: var(--mono); font-size: .9rem; text-decoration: none;
-  border: 1px solid var(--accent); color: var(--accent); transition: .2s;
-}
-.btn:hover { background: rgba(34,211,238,.1); transform: translateY(-2px); }
-.btn.solid { background: var(--accent); color: #06121a; font-weight: 700; }
-.btn.solid:hover { background: #4be0f5; }
-
-/* ---------- Sections ---------- */
-section { padding: 70px 7vw; max-width: 1100px; margin: 0 auto; }
-h2 { font-size: 1.6rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
-h2 .num { font-family: var(--mono); color: var(--accent); font-size: 1.1rem; }
-h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-#about p { color: var(--muted); max-width: 720px; font-size: 1.05rem; }
-
-/* ---------- Skills ---------- */
-.skill-group { margin-bottom: 20px; }
-.skill-group h3 { font-family: var(--mono); font-size: .95rem; color: var(--accent2); margin-bottom: 10px; }
-.chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip {
-  padding: 5px 14px; border-radius: 999px; font-size: .85rem; font-family: var(--mono);
-  background: var(--card); border: 1px solid var(--border); color: var(--text);
+#canvas {
+	display: block;
+	width: 815px;
+	height: 840px;
 }
 
-/* ---------- Projects ---------- */
-.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
-.filter {
-  padding: 6px 16px; border-radius: 999px; cursor: pointer; font-family: var(--mono);
-  font-size: .82rem; background: transparent; border: 1px solid var(--border); color: var(--muted); transition: .2s;
-}
-.filter:hover { border-color: var(--accent); color: var(--accent); }
-.filter.active { background: var(--accent); border-color: var(--accent); color: #06121a; font-weight: 700; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
-.card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-  overflow: hidden; display: flex; flex-direction: column; transition: .25s;
-}
-.card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(34,211,238,.08); }
-.cover { height: 150px; background-size: cover; background-position: center; position: relative; }
-.cover .star {
-  position: absolute; top: 10px; right: 10px; background: rgba(10,14,20,.8);
-  border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono);
-  font-size: .7rem; padding: 3px 10px; border-radius: 999px;
-}
-.card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
-.card-body h3 { font-size: 1.12rem; margin-bottom: 8px; }
-.card-body p { color: var(--muted); font-size: .92rem; flex: 1; }
-.card-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 12px; }
-.card-tags span { font-family: var(--mono); font-size: .72rem; color: var(--accent2); background: rgba(167,139,250,.1); padding: 3px 10px; border-radius: 999px; }
-.card-links { display: flex; gap: 14px; }
-.card-links a { font-family: var(--mono); font-size: .82rem; color: var(--accent); text-decoration: none; }
-.card-links a:hover { text-decoration: underline; }
-
-/* ---------- Contact / Footer ---------- */
-#contact { text-align: center; }
-#contact h2::after { display: none; }
-#contact h2 { justify-content: center; }
-#contact p { color: var(--muted); max-width: 520px; margin: 0 auto 28px; }
-footer { text-align: center; padding: 30px; color: var(--muted); font-family: var(--mono); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 40px; }
-
-@media (max-width: 640px) { nav ul { display: none; } }
-</style>
-</head>
-<body>
-
-<nav>
-  <a class="logo" href="#top">&lt;/&gt;</a>
-  <ul>
-    <li><a href="#about"><span class="num">01.</span>About</a></li>
-    <li><a href="#skills"><span class="num">02.</span>Skills</a></li>
-    <li><a href="#projects"><span class="num">03.</span>Projects</a></li>
-    <li><a href="#contact"><span class="num">04.</span>Contact</a></li>
-    <li><a id="nav-resume" href="#" target="_blank">Resume</a></li>
-  </ul>
-</nav>
-
-<header id="top">
-  <p class="kicker">Hi, my name is</p>
-  <h1><span class="grad" id="hero-name"></span></h1>
-  <p class="tagline" id="hero-tagline"></p>
-  <div class="hero-btns">
-    <a class="btn solid" href="#projects">View Projects</a>
-    <a class="btn" id="hero-resume" href="#" target="_blank">Resume</a>
-  </div>
-</header>
-
-<section id="about">
-  <h2><span class="num">01.</span>About Me</h2>
-  <p id="about-text"></p>
-</section>
-
-<section id="skills">
-  <h2><span class="num">02.</span>Skills</h2>
-  <div id="skills-list"></div>
-</section>
-
-<section id="projects">
-  <h2><span class="num">03.</span>Projects</h2>
-  <div class="filters" id="filters"></div>
-  <div class="grid" id="grid"></div>
-</section>
-
-<section id="contact">
-  <h2><span class="num">04.</span>Get In Touch</h2>
-  <p>Whether it's a project, an internship, or just a question — my inbox is open.</p>
-  <a class="btn solid" id="email-btn" href="#">Say Hello</a>
-</section>
-
-<footer>Built by <span id="footer-name"></span> · edit PROJECTS in index.html to add work</footer>
-
-<script>
-/* ============ RENDERING — no need to edit ============ */
-
-/* Profile */
-document.getElementById("hero-name").textContent = PROFILE.name;
-document.getElementById("hero-tagline").textContent = PROFILE.tagline;
-document.getElementById("about-text").textContent = PROFILE.about;
-document.getElementById("footer-name").textContent = PROFILE.name;
-document.getElementById("email-btn").href = "mailto:" + PROFILE.email;
-document.getElementById("nav-resume").href = PROFILE.resume;
-document.getElementById("hero-resume").href = PROFILE.resume;
-
-/* Skills */
-const skillsEl = document.getElementById("skills-list");
-for (const [group, items] of Object.entries(SKILLS)) {
-  const div = document.createElement("div");
-  div.className = "skill-group";
-  div.innerHTML = `<h3>// ${group}</h3><div class="chips">` +
-    items.map(s => `<span class="chip">${s}</span>`).join("") + `</div>`;
-  skillsEl.appendChild(div);
+#canvas:focus {
+	outline: none;
 }
 
-/* Projects: featured first, then original order */
-const sorted = [...PROJECTS].sort((a, b) => (b.featured === true) - (a.featured === true));
-
-/* Deterministic gradient cover when no image is given */
-function coverStyle(p) {
-  if (p.image) return `background-image:url('${p.image}')`;
-  let h = 0;
-  for (const c of p.title) h = (h * 31 + c.charCodeAt(0)) % 360;
-  return `background:linear-gradient(135deg, hsl(${h},60%,22%), hsl(${(h + 80) % 360},65%,32%))`;
+#status, #status-splash, #status-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
 }
 
-function render(filter) {
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-  sorted
-    .filter(p => filter === "All" || (p.tags || []).includes(filter))
-    .forEach(p => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="cover" style="${coverStyle(p)}">${p.featured ? '<span class="star">★ featured</span>' : ""}</div>
-        <div class="card-body">
-          <h3>${p.title}</h3>
-          <p>${p.desc}</p>
-          <div class="card-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
-          <div class="card-links">
-            ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>` : ""}
-            ${p.demo ? `<a href="${p.demo}" target="_blank">PLAY</a>` : ""}
-            ${p.example ? `<a href="${p.example}" target="_blank">Example Video</a>` : ""}
-            ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow</a>` : ""}
-          </div>
-        </div>`;
-      grid.appendChild(card);
-    });
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
 }
 
-/* Filter buttons built from all tags found in PROJECTS */
-const tags = ["All", ...new Set(PROJECTS.flatMap(p => p.tags || []))];
-const filtersEl = document.getElementById("filters");
-tags.forEach((t, i) => {
-  const b = document.createElement("button");
-  b.className = "filter" + (i === 0 ? " active" : "");
-  b.textContent = t;
-  b.onclick = () => {
-    document.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    render(t);
-  };
-  filtersEl.appendChild(b);
-});
+#status {
+	background-color: #242424;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+}
 
-render("All");
-</script>
-</body>
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
+}
+
+#status-progress, #status-notice {
+	display: none;
+}
+
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
+	z-index: 1;
+}
+		</style>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+	</head>
+	<body>
+		<canvas id="canvas" width="815" height="840">
+			Your browser does not support the canvas tag.
+		</canvas>
+
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
+
+		<div id="status">
+			<img id="status-splash" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
+		</div>
+
+		<script src="index.js"></script>
+		<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":0,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":3302032,"index.wasm":35376909},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_THREADS_ENABLED = false;
+const engine = new Engine(GODOT_CONFIG);
+
+(function () {
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
+
+	let initializing = true;
+	let statusMode = '';
+
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
+
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
+
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occured');
+		}
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
+
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+			// There's a chance that installing the service worker would fix the issue
+			Promise.race([
+				navigator.serviceWorker.getRegistration().then((registration) => {
+					if (registration != null) {
+						return Promise.reject(new Error('Service worker already exists.'));
+					}
+					return registration;
+				}).then(() => engine.installServiceWorker()),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
+			]).catch((err) => {
+				console.error('Error while registering service worker:', err);
+			}).then(() => {
+				window.location.reload();
+			});
+		} else {
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
+		}
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
 </html>
+
