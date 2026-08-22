@@ -142,6 +142,17 @@ const PROFILE = {
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* anyone with motion sensitivity set in their OS gets every animation on
+   the site (glitch flicker, hover tilt, cursor, ghost drift, etc.) cut
+   down to effectively instant instead of turned off unevenly one by one */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -168,6 +179,23 @@ body::before {
   mix-blend-mode: overlay;
 }
 
+/* ---------- Custom cursor ----------
+   Only added/enabled by JS on devices with a real mouse (see the fancyUI
+   check) - everyone else keeps their normal system cursor. */
+body.custom-cursor-on, body.custom-cursor-on a, body.custom-cursor-on button,
+body.custom-cursor-on .filter, body.custom-cursor-on .chip { cursor: none; }
+#custom-cursor {
+  position: fixed; top: 0; left: 0; width: 18px; height: 18px;
+  border: 1.5px solid var(--accent-bright); border-radius: 4px;
+  pointer-events: none; z-index: 2000; mix-blend-mode: difference;
+  opacity: 0; transition: width .18s, height .18s, background .18s, border-radius .18s, opacity .3s;
+}
+#custom-cursor.active { opacity: 1; }
+#custom-cursor.hovering {
+  width: 34px; height: 34px; background: rgba(124,92,255,.25); border-radius: 50%;
+}
+#custom-cursor.pressing { width: 14px; height: 14px; }
+
 /* ---------- Nav ---------- */
 nav {
   position: sticky; top: 0; z-index: 100;
@@ -177,10 +205,19 @@ nav {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
-.logo { font-family: var(--mono); color: var(--accent-bright); font-weight: 700; text-decoration: none; font-size: 1.05rem; }
+.logo { font-family: var(--mono); color: var(--accent-bright); font-weight: 700; text-decoration: none; font-size: 1.05rem; transition: text-shadow .25s; }
+.logo:hover { text-shadow: 0 0 14px rgba(var(--accent-bright-rgb),.7); }
 nav ul { display: flex; gap: 26px; list-style: none; }
-nav a { color: var(--text); text-decoration: none; font-size: .92rem; }
+/* nav links: a thin underline that slides in from the left on hover,
+   instead of just a color change */
+nav a { color: var(--text); text-decoration: none; font-size: .92rem; position: relative; }
+nav a::after {
+  content: ""; position: absolute; left: 0; bottom: -4px; height: 1px; width: 100%;
+  background: var(--accent-bright); transform: scaleX(0); transform-origin: left;
+  transition: transform .25s ease;
+}
 nav a:hover { color: var(--accent-bright); }
+nav a:hover::after { transform: scaleX(1); }
 nav .num { color: var(--accent-bright); font-family: var(--mono); font-size: .8rem; margin-right: 4px; }
 
 /* ---------- Hero ---------- */
@@ -231,10 +268,19 @@ h1 { line-height: 1.1; margin: 0; }
   display: inline-block; padding: 11px 22px; border-radius: 6px;
   font-family: var(--mono); font-size: .9rem; text-decoration: none;
   border: 1px solid var(--accent-bright); color: var(--accent-bright); transition: .2s;
+  position: relative; overflow: hidden; /* keeps the JS click-ripple contained */
 }
-.btn:hover { background: rgba(var(--accent-rgb),.15); transform: translateY(-2px); }
+.btn:hover { background: rgba(var(--accent-rgb),.15); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(var(--accent-rgb),.25); }
+.btn:active { transform: translateY(0) scale(.96); }
 .btn.solid { background: var(--accent); color: #fff; font-weight: 700; border-color: var(--accent); }
 .btn.solid:hover { background: var(--accent-bright); }
+/* expanding circle spawned at the click point by the JS ripple effect */
+.ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(255,255,255,.5); transform: scale(0);
+  animation: rippleOut .55s ease-out forwards;
+}
+@keyframes rippleOut { to { transform: scale(2.6); opacity: 0; } }
 
 /* ---------- Sections ---------- */
 section { padding: 70px 7vw; max-width: 1100px; margin: 0 auto; position: relative; }
@@ -275,22 +321,35 @@ h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 .chip {
   padding: 5px 14px; border-radius: 999px; font-size: .85rem; font-family: var(--mono);
   background: var(--card); border: 1px solid var(--border); color: var(--text);
+  transition: .2s; display: inline-block;
 }
+.chip:hover { border-color: var(--accent-bright); color: var(--accent-bright); transform: translateY(-2px); }
 
 /* ---------- Projects ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
 .filter {
   padding: 6px 16px; border-radius: 999px; cursor: pointer; font-family: var(--mono);
   font-size: .82rem; background: transparent; border: 1px solid var(--border); color: var(--muted); transition: .2s;
+  position: relative; overflow: hidden; /* keeps the JS click-ripple contained */
 }
 .filter:hover { border-color: var(--accent-bright); color: var(--accent-bright); }
+.filter:active { transform: scale(.94); }
 .filter.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
 .card {
   background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-  overflow: hidden; display: flex; flex-direction: column; transition: .25s;
+  overflow: hidden; display: flex; flex-direction: column; position: relative;
+  transition: transform .1s ease-out, border-color .25s, box-shadow .25s;
 }
 .card:hover { transform: translateY(-5px); border-color: var(--accent-bright); box-shadow: 0 10px 30px rgba(var(--accent-rgb),.18); }
+/* soft glow that follows the cursor around the card - JS sets --mx/--my
+   on mousemove; falls back to a centered glow on touch/keyboard hover */
+.card::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--accent-bright-rgb),.16), transparent 70%);
+  transition: opacity .25s;
+}
+.card:hover::before { opacity: 1; }
 .cover { height: 150px; background-size: cover; background-position: center; position: relative; }
 .cover .star {
   position: absolute; top: 10px; right: 10px; background: rgba(10,14,20,.8);
@@ -856,6 +915,94 @@ tags.forEach((t, i) => {
 });
 
 render("All");
+
+/* ============ Interactive polish: cursor, card tilt, click ripple ============
+   Three separate pieces, all gated the same way: only turn on for people
+   using an actual mouse (touch screens don't have hover, so a custom
+   cursor and a mouse-tracked tilt would just be dead code there) and only
+   when the OS isn't asking for reduced motion. Click ripples are cheap
+   and instant enough that they're left on for everyone. */
+const fancyUI = matchMedia("(pointer: fine)").matches &&
+                !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (fancyUI) {
+  /* ---- Custom cursor: a small terminal-style square that glides after
+     the real cursor and grows/glows over anything clickable ---- */
+  const cursorEl = document.createElement("div");
+  cursorEl.id = "custom-cursor";
+  document.body.appendChild(cursorEl);
+  document.body.classList.add("custom-cursor-on");
+
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2; // target (real mouse)
+  let cx = mx, cy = my; // current (eased position the box actually draws at)
+  window.addEventListener("mousemove", (e) => {
+    mx = e.clientX; my = e.clientY;
+    cursorEl.classList.add("active"); // hide it until the mouse actually moves once
+  });
+
+  const HOVER_SEL = "a, button, .btn, .chip, .filter, .card, input, textarea";
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.closest(HOVER_SEL)) cursorEl.classList.add("hovering");
+  });
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest(HOVER_SEL) && !e.relatedTarget?.closest(HOVER_SEL)) {
+      cursorEl.classList.remove("hovering");
+    }
+  });
+  document.addEventListener("mousedown", () => cursorEl.classList.add("pressing"));
+  document.addEventListener("mouseup", () => cursorEl.classList.remove("pressing"));
+
+  (function tick() {
+    // ease toward the real cursor position instead of snapping to it -
+    // this is what gives it that smooth "gliding" feel
+    cx += (mx - cx) * 0.22;
+    cy += (my - cy) * 0.22;
+    cursorEl.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    requestAnimationFrame(tick);
+  })();
+
+  /* ---- Project card tilt + spotlight: rotates toward the cursor and
+     moves a glow (via --mx/--my, see the .card::before CSS) to match ---- */
+  const gridEl = document.getElementById("grid");
+  gridEl.addEventListener("mousemove", (e) => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;  // 0..1 across the card
+    const py = (e.clientY - r.top) / r.height;
+    const rotateY = (px - 0.5) * 14;  // degrees
+    const rotateX = (0.5 - py) * 14;
+    card.style.transform =
+      `perspective(700px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-5px)`;
+    card.style.setProperty("--mx", `${px * 100}%`);
+    card.style.setProperty("--my", `${py * 100}%`);
+  });
+  gridEl.addEventListener("mouseleave", (e) => {
+    // mouseleave doesn't bubble, so this only fires for the grid itself -
+    // but we still need to reset whichever card the mouse was last over
+    document.querySelectorAll(".card").forEach(c => { c.style.transform = ""; });
+  }, true);
+  gridEl.addEventListener("mouseout", (e) => {
+    const card = e.target.closest(".card");
+    if (card && !e.relatedTarget?.closest(".card")) card.style.transform = "";
+  });
+}
+
+/* ---- Click ripple: works everywhere, including touch, since it's just
+   a quick reaction to a real click rather than continuous motion ---- */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest(".btn, .filter");
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  const size = Math.max(r.width, r.height) * 1.4;
+  const ripple = document.createElement("span");
+  ripple.className = "ripple";
+  ripple.style.width = ripple.style.height = `${size}px`;
+  ripple.style.left = `${e.clientX - r.left - size / 2}px`;
+  ripple.style.top = `${e.clientY - r.top - size / 2}px`;
+  el.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove());
+});
 </script>
 </body>
 </html>
