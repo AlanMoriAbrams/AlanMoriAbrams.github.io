@@ -38,7 +38,7 @@ const PROJECTS = [
   {
     title: "Example: AutoMod Simulation",
     desc: "AutoMod is a simulation software used to model manufacturing and logistics systems. For my CSUN research onboarding, I self-taught the software by studying its manual and created a logistics simulation to demonstrate my understanding of its capabilities.",
-    tags: ["Python", "Math"],
+    tags: ["AutoMod", "Math", "Research"],
     github: "https://github.com/yourusername/matrix-calc",
     demo: "",
     example: "videos/AutoModDemo.mp4",
@@ -93,7 +93,7 @@ const PROJECTS = [
   {
   title: "Combinatorial Algorithms Research Paper (Math 482 Research Paper)  ",
     desc: "My Combinatorial Algorithms Math Paper (I wrote the first 4 pages). Developed a combinatorial approach to the 4-cycle detection problem in undirected graphs. The project focused on identifying cycles by analyzing shared neighbors between pairs of vertices, with additional constraints for detecting induced 4-cycles where no diagonal edges exist.",
-    tags: ["Unreal Engine", "Game Development" ,"C++"],
+    tags: ["Math", "Research"],
     github: "",
     demo: "",
     example: "images/Math482ResearchPaper.pdf",
@@ -618,8 +618,9 @@ function render(filter) {
           <div class="card-links">
             ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>` : ""}
             ${p.demo ? `<a href="${p.demo}" target="_blank">PLAY</a>` : ""}
-            ${p.example ? `<a href="${p.example}" target="_blank">Example Video</a>` : ""}
+            ${p.video ? `<a href="${p.video}" target="_blank">Video</a>` : ""}
             ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow</a>` : ""}
+			${p.document ? `<a href="${p.document}" target="_blank">Document</a>` : ""}
           </div>
         </div>`;
       grid.appendChild(card);
