@@ -179,23 +179,6 @@ body::before {
   mix-blend-mode: overlay;
 }
 
-/* ---------- Custom cursor ----------
-   Only added/enabled by JS on devices with a real mouse (see the fancyUI
-   check) - everyone else keeps their normal system cursor. */
-body.custom-cursor-on, body.custom-cursor-on a, body.custom-cursor-on button,
-body.custom-cursor-on .filter, body.custom-cursor-on .chip { cursor: none; }
-#custom-cursor {
-  position: fixed; top: 0; left: 0; width: 18px; height: 18px;
-  border: 1.5px solid var(--accent-bright); border-radius: 4px;
-  pointer-events: none; z-index: 2000; mix-blend-mode: difference;
-  opacity: 0; transition: width .18s, height .18s, background .18s, border-radius .18s, opacity .3s;
-}
-#custom-cursor.active { opacity: 1; }
-#custom-cursor.hovering {
-  width: 34px; height: 34px; background: rgba(124,92,255,.25); border-radius: 50%;
-}
-#custom-cursor.pressing { width: 14px; height: 14px; }
-
 /* ---------- Nav ---------- */
 nav {
   position: sticky; top: 0; z-index: 100;
@@ -314,16 +297,38 @@ h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 }
 @media (min-width: 900px) { .ascii-donut { display: block; } }
 
-/* ---------- Skills ---------- */
-.skill-group { margin-bottom: 20px; }
-.skill-group h3 { font-family: var(--mono); font-size: .95rem; color: var(--accent2); margin-bottom: 10px; }
-.chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip {
-  padding: 5px 14px; border-radius: 999px; font-size: .85rem; font-family: var(--mono);
-  background: var(--card); border: 1px solid var(--border); color: var(--text);
-  transition: .2s; display: inline-block;
+/* ---------- Skills: RPG-style stat bars ----------
+   Each skill renders as a labeled bar that fills up like an XP/level meter
+   once the Skills section scrolls into view (see the statObserver JS).
+   The fill % is generated from the skill's name so it's consistent every
+   load, NOT a real self-assessment - it's there for the game aesthetic,
+   not as a literal claim about proficiency. */
+.skill-group { margin-bottom: 26px; }
+.skill-group h3 { font-family: var(--mono); font-size: .95rem; color: var(--accent2); margin-bottom: 14px; }
+.stat-list { display: flex; flex-direction: column; gap: 16px; }
+.stat-label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--mono); font-size: .85rem; margin-bottom: 6px;
 }
-.chip:hover { border-color: var(--accent-bright); color: var(--accent-bright); transform: translateY(-2px); }
+.stat-name { color: var(--text); }
+.stat-lv { color: var(--accent2); font-size: .72rem; letter-spacing: .04em; }
+.stat-bar {
+  height: 11px; border-radius: 4px; background: var(--card);
+  border: 1px solid var(--border); overflow: hidden; position: relative;
+}
+.stat-fill {
+  height: 100%; width: 0; border-radius: 3px; position: relative; overflow: hidden;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  transition: width 1.1s cubic-bezier(.22, 1, .36, 1);
+  box-shadow: 0 0 8px rgba(var(--accent-bright-rgb), .5);
+}
+/* a soft light sweeping across each filled bar, like a charging meter */
+.stat-fill::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.4) 50%, transparent 65%);
+  background-size: 250% 100%; animation: statShimmer 2.6s ease-in-out infinite;
+}
+@keyframes statShimmer { 0% { background-position: 220% 0; } 100% { background-position: -60% 0; } }
 
 /* ---------- Projects ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
@@ -853,15 +858,47 @@ window.addEventListener("scroll", updateHudProgress, { passive: true });
 window.addEventListener("resize", updateHudProgress);
 updateHudProgress();
 
-/* Skills */
+/* Skills: rendered as RPG-style stat bars. The fill % comes from hashing
+   the skill's own name, so it's stable across reloads but is decorative,
+   not a real self-rating - see the CSS comment above .stat-list. */
+function skillHashPct(s) {
+  let h = 0;
+  for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 997;
+  return 55 + (h % 41); // spread across 55-95%
+}
+
 const skillsEl = document.getElementById("skills-list");
 for (const [group, items] of Object.entries(SKILLS)) {
   const div = document.createElement("div");
   div.className = "skill-group";
-  div.innerHTML = `<h3>// ${group}</h3><div class="chips">` +
-    items.map(s => `<span class="chip">${s}</span>`).join("") + `</div>`;
+  const rows = items.map(s => {
+    const pct = skillHashPct(s);
+    const lv = Math.max(1, Math.round(pct / 10));
+    return `
+      <div class="stat-row">
+        <div class="stat-label"><span class="stat-name">${s}</span><span class="stat-lv">LV ${lv}</span></div>
+        <div class="stat-bar" role="progressbar" aria-label="${s}" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+          <div class="stat-fill" data-pct="${pct}"></div>
+        </div>
+      </div>`;
+  }).join("");
+  div.innerHTML = `<h3>// ${group}</h3><div class="stat-list">${rows}</div>`;
   skillsEl.appendChild(div);
 }
+
+/* fill each group's bars in (0 -> their real width) once that group
+   scrolls into view, instead of just appearing already full */
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll(".stat-fill").forEach(f => {
+        f.style.width = f.dataset.pct + "%";
+      });
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+document.querySelectorAll("#skills-list .skill-group").forEach(el => statObserver.observe(el));
 
 /* Projects: featured first, then original order */
 const sorted = [...PROJECTS].sort((a, b) => (b.featured === true) - (a.featured === true));
@@ -916,51 +953,15 @@ tags.forEach((t, i) => {
 
 render("All");
 
-/* ============ Interactive polish: cursor, card tilt, click ripple ============
-   Three separate pieces, all gated the same way: only turn on for people
-   using an actual mouse (touch screens don't have hover, so a custom
-   cursor and a mouse-tracked tilt would just be dead code there) and only
-   when the OS isn't asking for reduced motion. Click ripples are cheap
-   and instant enough that they're left on for everyone. */
+/* ============ Interactive polish: card tilt, click ripple ============
+   Gated to people using an actual mouse (touch screens don't have hover,
+   so a mouse-tracked tilt would just be dead code there) and only when
+   the OS isn't asking for reduced motion. Click ripples are cheap and
+   instant enough that they're left on for everyone, below. */
 const fancyUI = matchMedia("(pointer: fine)").matches &&
                 !matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (fancyUI) {
-  /* ---- Custom cursor: a small terminal-style square that glides after
-     the real cursor and grows/glows over anything clickable ---- */
-  const cursorEl = document.createElement("div");
-  cursorEl.id = "custom-cursor";
-  document.body.appendChild(cursorEl);
-  document.body.classList.add("custom-cursor-on");
-
-  let mx = window.innerWidth / 2, my = window.innerHeight / 2; // target (real mouse)
-  let cx = mx, cy = my; // current (eased position the box actually draws at)
-  window.addEventListener("mousemove", (e) => {
-    mx = e.clientX; my = e.clientY;
-    cursorEl.classList.add("active"); // hide it until the mouse actually moves once
-  });
-
-  const HOVER_SEL = "a, button, .btn, .chip, .filter, .card, input, textarea";
-  document.addEventListener("mouseover", (e) => {
-    if (e.target.closest(HOVER_SEL)) cursorEl.classList.add("hovering");
-  });
-  document.addEventListener("mouseout", (e) => {
-    if (e.target.closest(HOVER_SEL) && !e.relatedTarget?.closest(HOVER_SEL)) {
-      cursorEl.classList.remove("hovering");
-    }
-  });
-  document.addEventListener("mousedown", () => cursorEl.classList.add("pressing"));
-  document.addEventListener("mouseup", () => cursorEl.classList.remove("pressing"));
-
-  (function tick() {
-    // ease toward the real cursor position instead of snapping to it -
-    // this is what gives it that smooth "gliding" feel
-    cx += (mx - cx) * 0.22;
-    cy += (my - cy) * 0.22;
-    cursorEl.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
-    requestAnimationFrame(tick);
-  })();
-
   /* ---- Project card tilt + spotlight: rotates toward the cursor and
      moves a glow (via --mx/--my, see the .card::before CSS) to match ---- */
   const gridEl = document.getElementById("grid");
