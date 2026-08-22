@@ -1,208 +1,647 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-		<title>Flamebound</title>
-		<style>
-html, body, #canvas {
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alan Mori-Abrams — Portfolio</title>
 
+<!-- ============================================================
+     ★★★  ADD YOUR PROJECTS HERE  ★★★
+     ------------------------------------------------------------
+     To add a project: copy one { ... } block, paste it at the
+     TOP of the list, edit the fields, save, refresh the page.
+
+     Fields:
+       title    — project name (required)
+       desc     — 1–3 sentence description (required)
+       tags     — list of tech used, shows as chips + powers the filter
+       github   — repo link ("" to hide the button)
+       demo     — live demo link ("" to hide the button)
+       example  — example video link ("" to hide the button)
+       slideShow — slideshow link ("" to hide the button)
+       image    — path/URL to a screenshot ("" = auto gradient cover)
+       featured — true puts a ⭐ badge and sorts it first
+     ============================================================ -->
+<script>
+const PROJECTS = [
+  {
+    title: "Example: BEATBOY 3000",
+    desc: " **Beat Boy 3000** is an interactive beat-making app that lets users combine beats, samples, and instruments on a looping timeline to create and experiment with music. Used Next.js and Tone.js in python (Audio is not present in the example)  ", 
+    tags: ["Python", "Web development"],
+    github: "https://github.com/mateo-codes/beatapp",
+    demo: "https://mateocodes.net/beatboy",
+    example: "videos/BeatBoyDemo.mp4",
+    slideShow: "https://docs.google.com/presentation/d/1PxlBRJq8mFhrbTEU8CVeMie3IFEXt0ZxfQtLkUk496E/edit?slide=id.g1f87997393_0_782#slide=id.g1f87997393_0_782",
+    image: "images/BeatBoyimage.png", 
+    featured: false
+  },
+  {
+    title: "Example: AutoMod Simulation",
+    desc: "AutoMod is a simulation software used to model manufacturing and logistics systems. For my CSUN research onboarding, I self-taught the software by studying its manual and created a logistics simulation to demonstrate my understanding of its capabilities.",
+    tags: ["Python", "Math"],
+    github: "https://github.com/yourusername/matrix-calc",
+    demo: "",
+    example: "videos/AutoModDemo.mp4",
+    slideShow: "",
+    image: "images/AutoModimage.png",
+    featured: false
+  },
+  {
+    title: "Flame Bound",
+    desc: "Flamebound is a top down 2d round based shooter game where the character tries to survive hoards of enemy bats in order to survive as long as he can. Build this during CSUNS Game Development Clubs 2024 game jam ",
+    tags: ["GODOT", "Game Development"],
+    github: "https://github.com/AlanMoriAbrams/Flamebound-main",
+    demo: "https://alanmoriabrams.github.io/FlameBoundDemo/",
+    example: "",
+    slideShow: "",
+    image: "images/Flameboundimage.png",
+    featured: false
+  },
+  {
+    title: "Steam Boat Willie ",
+    desc: "A 2D platformer created in GODOT for CSUNS Game Development Club. This was my first time developing a game with a group ,we encountered GitHub compatibility issues that caused files to be unexpectedly added, deleted, or modified, creating merge conflicts and disrupting our development workflow which resulted in an unfinished game.  ",
+    tags: ["GODOT", "Game Development"],
+    github: "https://github.com/AlanMoriAbrams/SteamBoatWillieDemo",
+    demo: "https://alanmoriabrams.github.io/SteamBoatWillieDemo/?cachebust=1786800000",
+    example: "",
+    slideShow: "",
+    image: "images/SteamBoatWillieimage.png", 
+    featured: false
+  },
+  {
+  title: "Classy Clash ",
+    desc: "A 2D top-down action game built in C++ with the raylib library, featuring tile-based map collision and enemy AI that pursues the player. Learned how to use collision detections and vectors to create hitboxes for the player.",
+    tags: ["C#", "Game Development"],
+    github: "https://github.com/AlanMoriAbrams/ClassyClashDemo",
+    demo: "https://alanmoriabrams.github.io/ClassyClashDemo/",
+    example: "",
+    slideShow: "",
+    image: "images/ClassyClashimage.png", 
+    featured: false
+  },
+  {
+  title: "Unreal 3D Shooter  ",
+    desc: "A 3D Shooter created in Unreal Engine 4 or 5?",
+    tags: ["Unreal Engine", "Game Development" ,"C++"],
+    github: "",
+    demo: "",
+    example: "",
+    slideShow: "",
+    image: "", 
+    featured: false
+  },
+  {
+  title: "Combinatorial Algorithms Research Paper (Math 482 Research Paper)  ",
+    desc: "My Combinatorial Algorithms Math Paper (I wrote the first 4 pages). Developed a combinatorial approach to the 4-cycle detection problem in undirected graphs. The project focused on identifying cycles by analyzing shared neighbors between pairs of vertices, with additional constraints for detecting induced 4-cycles where no diagonal edges exist.",
+    tags: ["Unreal Engine", "Game Development" ,"C++"],
+    github: "",
+    demo: "",
+    example: "images/Math482ResearchPaper.pdf",
+    slideShow: "https://docs.google.com/presentation/d/13ECeHO44ASXo9lA0Se6gGT3HXGJrcX3a8AjghgyIT74/edit?slide=id.g3dd930aef1a_5_23#slide=id.g3dd930aef1a_5_23",
+    image: "images/4Cycleimage.png", 
+    featured: false
+  }
+
+];
+
+/* ---- Edit these too ---- */
+const SKILLS = {
+  "Languages":    ["Python", "Java", "GDScript", "C++"],
+  "Web & Tools":  ["VMWare", "Git", "Linux", "AutoMod", "Cisco Packet Tracer", "GODOT", "Unreal Engine"],
+  "Math":         ["Linear Algebra", "Probability", "Discrete Math", "Calculus 1,2,3", "Combinatorial Algorithms"]
+};
+
+const PROFILE = {
+  name: "Alan Mori-Abrams",
+  tagline: "CS & Math Student",
+  about: "I'm a Computer Science and Mathematics student who is pursuing the field of Information Technology to then move into Cyber Security ",
+  email: "Alan.mori.abrams@gmail.com",
+  github: "https://github.com/AlanMoriAbrams",
+  linkedin: "https://linkedin.com/in/alan-mori-abrams-552b79216/",
+  resume: "images/ITResume.pdf",
+};
+</script>
+<!-- ★★★  END OF EDITABLE SECTION — no need to touch anything below  ★★★ -->
+
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #10151f;
+  --card: #141b26;
+  --border: #1f2937;
+  --text: #d6deeb;
+  --muted: #7d8799;
+  --accent: #5539CC;
+  --accent-bright: #7c5cff;
+  --accent2: #a78bfa;
+  --accent-rgb: 85, 57, 204;
+  --accent-bright-rgb: 124, 92, 255;
+  --glitch1: #22d3ee;
+  --glitch2: #ff3864;
+  --mono: "SF Mono", "Fira Code", Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-	color: white;
-	background-color: black;
-	overflow: hidden;
-	touch-action: none;
-	/* the game keeps a fixed internal resolution (no in-game camera), so
-	   center that fixed canvas in the browser window instead of letting it
-	   sit flush in the top-left corner on screens larger than the game */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  /* leaves room so the fixed HUD bar at the bottom never covers content */
+  padding-bottom: 44px;
+  position: relative;
+}
+/* faint CRT scanlines over the whole page - decorative only, never blocks clicks */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.02) 0px,
+    rgba(255,255,255,.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
 }
 
-#canvas {
-	display: block;
-	width: 815px;
-	height: 840px;
+/* ---------- Nav ---------- */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 7vw;
+  background: rgba(10,14,20,.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { font-family: var(--mono); color: var(--accent-bright); font-weight: 700; text-decoration: none; font-size: 1.05rem; }
+nav ul { display: flex; gap: 26px; list-style: none; }
+nav a { color: var(--text); text-decoration: none; font-size: .92rem; }
+nav a:hover { color: var(--accent-bright); }
+nav .num { color: var(--accent-bright); font-family: var(--mono); font-size: .8rem; margin-right: 4px; }
+
+/* ---------- Hero ---------- */
+header { padding: 110px 7vw 80px; max-width: 1100px; }
+.kicker { font-family: var(--mono); color: var(--accent-bright); margin-bottom: 14px; }
+
+/* fake terminal prompt line above the name, e.g. "alan@portfolio ~ % ./whoami" */
+.term-line { font-family: var(--mono); color: var(--muted); font-size: .95rem; margin-bottom: 18px; }
+.term-line .term-user { color: var(--accent-bright); }
+.term-cursor { display: inline-block; margin-left: 2px; background: var(--accent-bright); width: 8px; height: 1em; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- Hero name: dot-matrix canvas ----------
+   Instead of plain text, the name is drawn onto a <canvas> as a grid of
+   small dots sampled from the letter shapes (like a halftone print).
+   All the actual drawing happens in the renderDotName() function down
+   in the script at the bottom - this CSS just sizes/positions it. */
+h1 { line-height: 1.1; margin: 0; }
+.hero-name-wrap { display: block; width: 100%; }
+#hero-canvas { display: block; }
+/* brief RGB-split "glitch" flicker, mostly still, ticks for a moment every few seconds */
+#hero-canvas.glitch { animation: glitchShift 6s infinite; }
+@keyframes glitchShift {
+  0%, 95%, 100% { filter: none; transform: translate(0,0); }
+  96% { filter: drop-shadow(-2px 0 var(--glitch1)) drop-shadow(2px 0 var(--glitch2)); transform: translate(-1px,1px); }
+  97% { filter: drop-shadow(2px 0 var(--glitch1)) drop-shadow(-2px 0 var(--glitch2)); transform: translate(1px,-1px); }
+  98% { filter: drop-shadow(-1px 0 var(--glitch1)) drop-shadow(1px 0 var(--glitch2)); transform: translate(0,0); }
+  99% { filter: none; transform: translate(0,0); }
+}
+/* visually-hidden but still readable by screen readers / search engines,
+   since the canvas dots aren't real selectable text */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
-#canvas:focus {
-	outline: none;
+.tagline { color: var(--muted); font-size: clamp(1.1rem, 3vw, 1.5rem); margin-top: 8px; }
+.hero-btns { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: 11px 22px; border-radius: 6px;
+  font-family: var(--mono); font-size: .9rem; text-decoration: none;
+  border: 1px solid var(--accent-bright); color: var(--accent-bright); transition: .2s;
+}
+.btn:hover { background: rgba(var(--accent-rgb),.15); transform: translateY(-2px); }
+.btn.solid { background: var(--accent); color: #fff; font-weight: 700; border-color: var(--accent); }
+.btn.solid:hover { background: var(--accent-bright); }
+
+/* ---------- Sections ---------- */
+section { padding: 70px 7vw; max-width: 1100px; margin: 0 auto; position: relative; }
+h2 { font-size: 1.6rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+h2 .cmt { font-family: var(--mono); color: var(--muted); font-size: 1rem; font-weight: 400; }
+h2 .num { font-family: var(--mono); color: var(--accent-bright); font-size: 1.1rem; }
+h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+#about p { color: var(--muted); max-width: 720px; font-size: 1.05rem; }
+
+/* sections fade + rise into place as you scroll to them - toggled by JS below */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* tiny ascii-art mascots tucked in the empty space between sections - purely for fun */
+.ascii-pet {
+  position: absolute; font-family: var(--mono); font-size: .8rem; line-height: 1.3;
+  color: var(--accent2); opacity: .45; white-space: pre; pointer-events: none;
+  animation: petBob 4s ease-in-out infinite;
+  display: none;
+}
+@keyframes petBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@media (min-width: 900px) { .ascii-pet { display: block; } }
+
+/* ---------- Skills ---------- */
+.skill-group { margin-bottom: 20px; }
+.skill-group h3 { font-family: var(--mono); font-size: .95rem; color: var(--accent2); margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  padding: 5px 14px; border-radius: 999px; font-size: .85rem; font-family: var(--mono);
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
 }
 
-#status, #status-splash, #status-progress {
-	position: absolute;
-	left: 0;
-	right: 0;
+/* ---------- Projects ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.filter {
+  padding: 6px 16px; border-radius: 999px; cursor: pointer; font-family: var(--mono);
+  font-size: .82rem; background: transparent; border: 1px solid var(--border); color: var(--muted); transition: .2s;
+}
+.filter:hover { border-color: var(--accent-bright); color: var(--accent-bright); }
+.filter.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; display: flex; flex-direction: column; transition: .25s;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--accent-bright); box-shadow: 0 10px 30px rgba(var(--accent-rgb),.18); }
+.cover { height: 150px; background-size: cover; background-position: center; position: relative; }
+.cover .star {
+  position: absolute; top: 10px; right: 10px; background: rgba(10,14,20,.8);
+  border: 1px solid var(--accent-bright); color: var(--accent-bright); font-family: var(--mono);
+  font-size: .7rem; padding: 3px 10px; border-radius: 999px;
+}
+.card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+.card-body h3 { font-size: 1.12rem; margin-bottom: 8px; }
+.card-body p { color: var(--muted); font-size: .92rem; flex: 1; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 12px; }
+.card-tags span { font-family: var(--mono); font-size: .72rem; color: var(--accent2); background: rgba(167,139,250,.1); padding: 3px 10px; border-radius: 999px; }
+.card-links { display: flex; gap: 14px; }
+.card-links a { font-family: var(--mono); font-size: .82rem; color: var(--accent-bright); text-decoration: none; }
+.card-links a:hover { text-decoration: underline; }
+
+/* ---------- Contact / Footer ---------- */
+#contact { text-align: center; }
+#contact h2::after { display: none; }
+#contact h2 { justify-content: center; }
+#contact p { color: var(--muted); max-width: 520px; margin: 0 auto 28px; }
+footer { text-align: center; padding: 30px; color: var(--muted); font-family: var(--mono); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 40px; }
+
+/* ---------- HUD bar ----------
+   Fixed to the bottom of the screen the whole time, styled like the HUD
+   in Flamebound/ClassyClash (label + bar + count). Instead of health or
+   wave number, it tracks which section you're scrolled to and how far
+   down the page you are. Filled in and updated by JS below. */
+.hud {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
+  display: flex; align-items: center; gap: 14px;
+  height: 34px; padding: 0 16px;
+  background: rgba(10,14,20,.92); backdrop-filter: blur(6px);
+  border-top: 1px solid var(--accent);
+  font-family: var(--mono); font-size: .74rem; color: var(--muted);
+}
+.hud-path { white-space: nowrap; }
+.hud-path .hud-user { color: var(--accent-bright); }
+.hud-path .hud-arrow { color: var(--accent2); margin: 0 2px; }
+.hud-path #hud-section { color: var(--text); }
+.hud-bar {
+  flex: 1; max-width: 320px; height: 10px; border-radius: 2px;
+  background: var(--card); border: 1px solid var(--border);
+  overflow: hidden;
+  /* thin dark segment lines across the fill, like a game health bar */
+  background-image: repeating-linear-gradient(to right, transparent 0 6px, rgba(0,0,0,.35) 6px 7px);
+}
+.hud-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  transition: width .15s linear;
+}
+.hud-pct { width: 42px; text-align: right; color: var(--accent-bright); }
+@media (max-width: 640px) { .hud-bar { display: none; } }
+
+@media (max-width: 640px) { nav ul { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#top">&lt;/&gt;</a>
+  <ul>
+    <li><a href="#about"><span class="num">01.</span>About</a></li>
+    <li><a href="#skills"><span class="num">02.</span>Skills</a></li>
+    <li><a href="#projects"><span class="num">03.</span>Projects</a></li>
+    <li><a href="#contact"><span class="num">04.</span>Contact</a></li>
+    <li><a id="nav-resume" href="#" target="_blank">Resume</a></li>
+  </ul>
+</nav>
+
+<header id="top">
+  <p class="term-line"><span class="term-user">alan@portfolio</span> ~ % <span id="term-cmd"></span><span class="term-cursor"></span></p>
+  <h1 class="hero-name-wrap" id="hero-name-wrap">
+    <canvas id="hero-canvas" class="glitch" role="img"></canvas>
+    <span class="sr-only" id="hero-name-sr"></span>
+  </h1>
+  <p class="tagline" id="hero-tagline"></p>
+  <div class="hero-btns">
+    <a class="btn solid" href="#projects">View Projects</a>
+    <a class="btn" id="hero-resume" href="#" target="_blank">Resume</a>
+  </div>
+</header>
+
+<section id="about" class="reveal">
+  <h2><span class="cmt">//</span> <span class="num">01.</span>About Me</h2>
+  <p id="about-text"></p>
+  <pre class="ascii-pet" style="top: 20px; right: 6vw;" aria-hidden="true"> (•_•)
+&lt;)   )╯
+ /    \</pre>
+</section>
+
+<section id="skills" class="reveal">
+  <h2><span class="cmt">//</span> <span class="num">02.</span>Skills</h2>
+  <div id="skills-list"></div>
+</section>
+
+<section id="projects" class="reveal">
+  <h2><span class="cmt">//</span> <span class="num">03.</span>Projects</h2>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="contact" class="reveal">
+  <h2><span class="cmt">//</span> <span class="num">04.</span>Get In Touch</h2>
+  <p>Whether it's a project, an internship, or just a question — my inbox is open.</p>
+  <a class="btn solid" id="email-btn" href="#">Say Hello</a>
+</section>
+
+<footer>Built by <span id="footer-name"></span> · edit PROJECTS in index.html to add work</footer>
+
+<!-- Fixed game-style HUD bar: current section on the left (like a "zone" label),
+     a filling bar + percentage on the right that tracks how far down the page
+     you've scrolled (like a health/XP bar). Filled in by the JS below. -->
+<div class="hud">
+  <span class="hud-path"><span class="hud-user">alan@portfolio</span> <span class="hud-arrow">›</span> <span id="hud-section">top</span></span>
+  <div class="hud-bar"><div class="hud-bar-fill" id="hud-fill"></div></div>
+  <span class="hud-pct" id="hud-pct">0%</span>
+</div>
+
+<script>
+/* ============ RENDERING — no need to edit ============ */
+
+/* Profile */
+document.getElementById("hero-name-sr").textContent = PROFILE.name;
+document.getElementById("hero-canvas").setAttribute("aria-label", PROFILE.name);
+document.getElementById("hero-tagline").textContent = PROFILE.tagline;
+document.getElementById("about-text").textContent = PROFILE.about;
+document.getElementById("footer-name").textContent = PROFILE.name;
+document.getElementById("email-btn").href = "mailto:" + PROFILE.email;
+document.getElementById("nav-resume").href = PROFILE.resume;
+document.getElementById("hero-resume").href = PROFILE.resume;
+
+/* Terminal-style typewriter: types "./whoami" into the prompt line on load */
+(function typewriter() {
+  const el = document.getElementById("term-cmd");
+  const text = "./whoami";
+  let i = 0;
+  const tick = () => {
+    el.textContent = text.slice(0, i);
+    i++;
+    if (i <= text.length) setTimeout(tick, 90);
+  };
+  tick();
+})();
+
+/* ============ Dot-matrix hero name ============
+   Draws PROFILE.name onto a <canvas> as a grid of small dots instead of
+   plain text - each dot is only drawn where it lands inside a letter
+   shape, which is figured out by rendering the text once to a hidden
+   ("offscreen") canvas and reading its pixels.
+   How it works, step by step:
+     1. Pick the biggest font size that still fits the name in the
+        available width (measureFit).
+     2. Draw the name normally onto an offscreen canvas so we have
+        something to sample from.
+     3. Walk across that offscreen canvas in a grid (one check every
+        `gap` pixels). Wherever a grid point lands inside a letter
+        (i.e. its pixel isn't transparent), remember a dot there.
+     4. On every animation frame, redraw all the remembered dots onto
+        the *visible* canvas - each one gently flickering in brightness
+        and colored along a left-to-right gradient - which is what
+        gives it that shimmering halftone-print look. */
+(function renderDotName() {
+  const wrap = document.getElementById("hero-name-wrap");
+  const canvas = document.getElementById("hero-canvas");
+  const ctx = canvas.getContext("2d");
+  const root = getComputedStyle(document.documentElement);
+  const accentRGB = root.getPropertyValue("--accent-rgb").split(",").map(Number);
+  const accentBrightRGB = root.getPropertyValue("--accent-bright-rgb").split(",").map(Number);
+
+  let dots = [];
+  let offW = 0, offH = 0;
+  let firstRun = true;
+  let startTime = null;
+
+  function measureFit(text, cssWidth) {
+    // binary-search the largest font size whose text fits cssWidth
+    let lo = 10, hi = 220;
+    for (let i = 0; i < 22; i++) {
+      const mid = (lo + hi) / 2;
+      ctx.font = `900 ${mid}px -apple-system, "Segoe UI", Arial, sans-serif`;
+      if (ctx.measureText(text).width > cssWidth * 0.98) hi = mid; else lo = mid;
+    }
+    return Math.max(24, Math.min(lo, 170));
+  }
+
+  function layout() {
+    const text = (PROFILE.name || "").toUpperCase();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cssW = wrap.clientWidth;
+    if (!text || cssW < 10) return;
+
+    const fontSize = measureFit(text, cssW);
+    ctx.font = `900 ${fontSize}px -apple-system, "Segoe UI", Arial, sans-serif`;
+    const metrics = ctx.measureText(text);
+    const textW = metrics.width;
+    const ascent = metrics.actualBoundingBoxAscent || fontSize * 0.8;
+    const descent = metrics.actualBoundingBoxDescent || fontSize * 0.25;
+    const padY = fontSize * 0.22;
+    const cssH = ascent + descent + padY * 2;
+
+    canvas.style.width = cssW + "px";
+    canvas.style.height = cssH + "px";
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    offW = canvas.width; offH = canvas.height;
+
+    // offscreen canvas: draw the name as normal solid text so we can
+    // sample which pixels are "inside" a letter
+    const off = document.createElement("canvas");
+    off.width = offW; off.height = offH;
+    const octx = off.getContext("2d");
+    octx.font = `900 ${fontSize * dpr}px -apple-system, "Segoe UI", Arial, sans-serif`;
+    octx.textBaseline = "alphabetic";
+    octx.fillStyle = "#fff";
+    const startX = (offW - textW * dpr) / 2;
+    const baselineY = padY * dpr + ascent * dpr;
+    octx.fillText(text, startX, baselineY);
+
+    const img = octx.getImageData(0, 0, offW, offH).data;
+    const gap = Math.max(3, Math.round(fontSize / 20)) * dpr;
+
+    const newDots = [];
+    for (let y = 0; y < offH; y += gap) {
+      for (let x = 0; x < offW; x += gap) {
+        const idx = (Math.floor(y) * offW + Math.floor(x)) * 4;
+        const a = img[idx + 3];
+        if (a > 50) {
+          newDots.push({
+            x, y, a: a / 255,
+            phase: Math.random() * Math.PI * 2,
+            introDelay: firstRun ? Math.random() * 500 : 0,
+            radius: gap * (0.3 + 0.22 * (a / 255)),
+          });
+        }
+      }
+    }
+    dots = newDots;
+    firstRun = false;
+  }
+
+  function mixColor(t, alpha) {
+    const r = Math.round(accentRGB[0] + (accentBrightRGB[0] - accentRGB[0]) * t);
+    const g = Math.round(accentRGB[1] + (accentBrightRGB[1] - accentRGB[1]) * t);
+    const b = Math.round(accentRGB[2] + (accentBrightRGB[2] - accentRGB[2]) * t);
+    return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+  }
+
+  function draw(t) {
+    if (startTime === null) startTime = t;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const d of dots) {
+      const age = t - startTime - d.introDelay;
+      const intro = Math.max(0, Math.min(1, age / 260));
+      if (intro <= 0) continue;
+      const shimmer = 0.78 + 0.22 * Math.sin(t / 850 + d.phase);
+      const alpha = d.a * shimmer * intro;
+      ctx.fillStyle = mixColor(d.x / offW, alpha);
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.radius * (0.7 + 0.3 * intro), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  layout();
+  requestAnimationFrame(draw);
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layout, 150);
+  });
+})();
+
+/* Fade sections in as they scroll into view */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+/* HUD bar: which section is on screen + how far down the page we've scrolled */
+const hudSectionEl = document.getElementById("hud-section");
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) hudSectionEl.textContent = entry.target.id;
+  });
+}, { rootMargin: "-45% 0px -45% 0px" }); // fires when a section crosses the middle of the screen
+document.querySelectorAll("header#top, section").forEach(el => sectionObserver.observe(el));
+
+const hudFill = document.getElementById("hud-fill");
+const hudPct = document.getElementById("hud-pct");
+function updateHudProgress() {
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
+  hudFill.style.width = pct + "%";
+  hudPct.textContent = Math.round(pct) + "%";
+}
+window.addEventListener("scroll", updateHudProgress, { passive: true });
+window.addEventListener("resize", updateHudProgress);
+updateHudProgress();
+
+/* Skills */
+const skillsEl = document.getElementById("skills-list");
+for (const [group, items] of Object.entries(SKILLS)) {
+  const div = document.createElement("div");
+  div.className = "skill-group";
+  div.innerHTML = `<h3>// ${group}</h3><div class="chips">` +
+    items.map(s => `<span class="chip">${s}</span>`).join("") + `</div>`;
+  skillsEl.appendChild(div);
 }
 
-#status, #status-splash {
-	top: 0;
-	bottom: 0;
+/* Projects: featured first, then original order */
+const sorted = [...PROJECTS].sort((a, b) => (b.featured === true) - (a.featured === true));
+
+/* Deterministic gradient cover when no image is given */
+function coverStyle(p) {
+  if (p.image) return `background-image:url('${p.image}')`;
+  let h = 0;
+  for (const c of p.title) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `background:linear-gradient(135deg, hsl(${h},60%,22%), hsl(${(h + 80) % 360},65%,32%))`;
 }
 
-#status {
-	background-color: #242424;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	visibility: hidden;
+function render(filter) {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  sorted
+    .filter(p => filter === "All" || (p.tags || []).includes(filter))
+    .forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="cover" style="${coverStyle(p)}">${p.featured ? '<span class="star">★ featured</span>' : ""}</div>
+        <div class="card-body">
+          <h3>${p.title}</h3>
+          <p>${p.desc}</p>
+          <div class="card-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
+          <div class="card-links">
+            ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>` : ""}
+            ${p.demo ? `<a href="${p.demo}" target="_blank">PLAY</a>` : ""}
+            ${p.example ? `<a href="${p.example}" target="_blank">Example Video</a>` : ""}
+            ${p.slideShow ? `<a href="${p.slideShow}" target="_blank">Slideshow</a>` : ""}
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
 }
 
-#status-splash {
-	max-height: 100%;
-	max-width: 100%;
-	margin: auto;
-}
+/* Filter buttons built from all tags found in PROJECTS */
+const tags = ["All", ...new Set(PROJECTS.flatMap(p => p.tags || []))];
+const filtersEl = document.getElementById("filters");
+tags.forEach((t, i) => {
+  const b = document.createElement("button");
+  b.className = "filter" + (i === 0 ? " active" : "");
+  b.textContent = t;
+  b.onclick = () => {
+    document.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    render(t);
+  };
+  filtersEl.appendChild(b);
+});
 
-#status-progress, #status-notice {
-	display: none;
-}
-
-#status-progress {
-	bottom: 10%;
-	width: 50%;
-	margin: 0 auto;
-}
-
-#status-notice {
-	background-color: #5b3943;
-	border-radius: 0.5rem;
-	border: 1px solid #9b3943;
-	color: #e0e0e0;
-	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
-	line-height: 1.3;
-	margin: 0 2rem;
-	overflow: hidden;
-	padding: 1rem;
-	text-align: center;
-	z-index: 1;
-}
-		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
-<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
-
-	</head>
-	<body>
-		<canvas id="canvas" width="815" height="840">
-			Your browser does not support the canvas tag.
-		</canvas>
-
-		<noscript>
-			Your browser does not support JavaScript.
-		</noscript>
-
-		<div id="status">
-			<img id="status-splash" src="index.png" alt="">
-			<progress id="status-progress"></progress>
-			<div id="status-notice"></div>
-		</div>
-
-		<script src="index.js"></script>
-		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":0,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":3302032,"index.wasm":35376909},"focusCanvas":true,"gdextensionLibs":[]};
-const GODOT_THREADS_ENABLED = false;
-const engine = new Engine(GODOT_CONFIG);
-
-(function () {
-	const statusOverlay = document.getElementById('status');
-	const statusProgress = document.getElementById('status-progress');
-	const statusNotice = document.getElementById('status-notice');
-
-	let initializing = true;
-	let statusMode = '';
-
-	function setStatusMode(mode) {
-		if (statusMode === mode || !initializing) {
-			return;
-		}
-		if (mode === 'hidden') {
-			statusOverlay.remove();
-			initializing = false;
-			return;
-		}
-		statusOverlay.style.visibility = 'visible';
-		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
-		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
-		statusMode = mode;
-	}
-
-	function setStatusNotice(text) {
-		while (statusNotice.lastChild) {
-			statusNotice.removeChild(statusNotice.lastChild);
-		}
-		const lines = text.split('\n');
-		lines.forEach((line) => {
-			statusNotice.appendChild(document.createTextNode(line));
-			statusNotice.appendChild(document.createElement('br'));
-		});
-	}
-
-	function displayFailureNotice(err) {
-		console.error(err);
-		if (err instanceof Error) {
-			setStatusNotice(err.message);
-		} else if (typeof err === 'string') {
-			setStatusNotice(err);
-		} else {
-			setStatusNotice('An unknown error occured');
-		}
-		setStatusMode('notice');
-		initializing = false;
-	}
-
-	const missing = Engine.getMissingFeatures({
-		threads: GODOT_THREADS_ENABLED,
-	});
-
-	if (missing.length !== 0) {
-		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
-			// There's a chance that installing the service worker would fix the issue
-			Promise.race([
-				navigator.serviceWorker.getRegistration().then((registration) => {
-					if (registration != null) {
-						return Promise.reject(new Error('Service worker already exists.'));
-					}
-					return registration;
-				}).then(() => engine.installServiceWorker()),
-				// For some reason, `getRegistration()` can stall
-				new Promise((resolve) => {
-					setTimeout(() => resolve(), 2000);
-				}),
-			]).catch((err) => {
-				console.error('Error while registering service worker:', err);
-			}).then(() => {
-				window.location.reload();
-			});
-		} else {
-			// Display the message as usual
-			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
-			displayFailureNotice(missingMsg + missing.join('\n'));
-		}
-	} else {
-		setStatusMode('progress');
-		engine.startGame({
-			'onProgress': function (current, total) {
-				if (current > 0 && total > 0) {
-					statusProgress.value = current;
-					statusProgress.max = total;
-				} else {
-					statusProgress.removeAttribute('value');
-					statusProgress.removeAttribute('max');
-				}
-			},
-		}).then(() => {
-			setStatusMode('hidden');
-		}, displayFailureNotice);
-	}
-}());
-		</script>
-	</body>
+render("All");
+</script>
+</body>
 </html>
-
