@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://d0hmvn0j7ujly"]
+
+[ext_resource type="Script" path="res://Menus/Main Menu/Main Menu Control.gd" id="1_dng1d"]
+[ext_resource type="Texture2D" uid="uid://vrtix0h8pcn4" path="res://Menus/Main Menu/BackgroundWithWatermickeymania_wharf_bg-bw.png" id="1_g5cd8"]
+[ext_resource type="FontFile" uid="uid://8cxb8nch4s1p" path="res://Menus/Main Menu/MonkeyFingersNF.ttf" id="1_th480"]
+[ext_resource type="Theme" uid="uid://b74jrni0uw4su" path="res://font.tres" id="2_d6h7r"]
+
+[sub_resource type="Theme" id="Theme_skg4q"]
+
+[sub_resource type="Theme" id="Theme_oxkkw"]
+default_font = ExtResource("1_th480")
+default_font_size = 45
+
+[node name="Main Menu" type="Node2D"]
+
+[node name="BackgroundWithWatermickeymaniaWharfBg-bw" type="Sprite2D" parent="."]
+position = Vector2(649, 366.25)
+scale = Vector2(2.53516, 2.88477)
+texture = ExtResource("1_g5cd8")
+
+[node name="Main Menu Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_skg4q")
+script = ExtResource("1_dng1d")
+
+[node name="ColorRect" type="ColorRect" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 463.0
+offset_top = 220.0
+offset_right = 725.0
+offset_bottom = 511.0
+
+[node name="GameTitle" type="Label" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 274.0
+offset_top = 71.0
+offset_right = 946.0
+offset_bottom = 180.0
+theme = SubResource("Theme_oxkkw")
+theme_override_colors/font_color = Color(0.341176, 0.823529, 0.596078, 1)
+text = "Steamboat Willie Game Project
+            Tentative Name"
+
+[node name="StartButton" type="Button" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 547.0
+offset_top = 231.0
+offset_right = 639.0
+offset_bottom = 280.0
+theme = ExtResource("2_d6h7r")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "Start"
+
+[node name="CreditsButton" type="Button" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 534.0
+offset_top = 374.0
+offset_right = 664.0
+offset_bottom = 423.0
+theme = ExtResource("2_d6h7r")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "Credits"
+
+[node name="HTPButton" type="Button" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 488.0
+offset_top = 305.0
+offset_right = 703.0
+offset_bottom = 354.0
+theme = ExtResource("2_d6h7r")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "How To Play"
+
+[node name="Quit" type="Button" parent="Main Menu Control"]
+layout_mode = 0
+offset_left = 557.0
+offset_top = 444.0
+offset_right = 637.0
+offset_bottom = 493.0
+theme = ExtResource("2_d6h7r")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "Quit"

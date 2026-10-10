@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvkikkerpln3a"]
+
+[ext_resource type="Theme" uid="uid://b74jrni0uw4su" path="res://font.tres" id="1_2bag7"]
+[ext_resource type="FontFile" uid="uid://8cxb8nch4s1p" path="res://Menus/Main Menu/MonkeyFingersNF.ttf" id="2_a774i"]
+
+[node name="youWin" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 531.0
+offset_bottom = 424.0
+color = Color(0.497474, 0.497474, 0.497474, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 89.0
+offset_right = 157.0
+offset_bottom = 122.0
+scale = Vector2(5, 5)
+text = "You Win!"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="QuitButton" type="Button" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 166.0
+offset_top = 282.0
+offset_right = 424.0
+offset_bottom = 331.0
+scale = Vector2(0.8, 0.8)
+theme = ExtResource("1_2bag7")
+theme_override_fonts/font = ExtResource("2_a774i")
+text = "Main Menu"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 393.0
+offset_top = 27.0
+offset_right = 556.0
+offset_bottom = 60.0
+scale = Vector2(0.6, 0.6)
+text = "This menu is bland ik"

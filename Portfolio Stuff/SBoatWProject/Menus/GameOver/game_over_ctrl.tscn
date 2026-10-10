@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba71n4q2r6ttw"]
+
+[ext_resource type="Script" path="res://GameOverCtrl.gd" id="1_kuj8i"]
+
+[node name="GameOver" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kuj8i")
+
+[node name="MenuLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 285.0
+offset_bottom = 75.0
+text = "Game over
+too bad :p
+press 'space' to return to main menu
+"

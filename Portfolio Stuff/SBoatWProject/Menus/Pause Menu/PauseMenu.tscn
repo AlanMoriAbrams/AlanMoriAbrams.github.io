@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://btqh1pnvvh833"]
+
+[ext_resource type="Script" path="res://Menus/Pause Menu/PauseMenu.gd" id="1_y4jgm"]
+[ext_resource type="Shader" path="res://Menus/Pause Menu/PauseMenu.gdshader" id="2_grh22"]
+[ext_resource type="FontFile" uid="uid://8cxb8nch4s1p" path="res://Menus/Main Menu/MonkeyFingersNF.ttf" id="3_4rpbi"]
+[ext_resource type="Theme" uid="uid://b74jrni0uw4su" path="res://font.tres" id="3_fyccp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o4qbd"]
+shader = ExtResource("2_grh22")
+shader_parameter/blur = 1.469
+shader_parameter/brightness = 1.0
+
+[node name="PauseMenu" type="Control"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y4jgm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_o4qbd")
+layout_mode = 0
+offset_left = -917.0
+offset_top = -492.0
+offset_right = 1155.0
+offset_bottom = 790.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_right = 241.0
+offset_bottom = 152.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_fyccp")
+theme_override_fonts/font = ExtResource("3_4rpbi")
+text = "Game Paused"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="MarginContainer/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("3_fyccp")
+theme_override_fonts/font = ExtResource("3_4rpbi")
+text = "Resume"
+
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("3_fyccp")
+theme_override_fonts/font = ExtResource("3_4rpbi")
+text = "Quit"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]

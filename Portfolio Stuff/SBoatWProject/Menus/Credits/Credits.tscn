@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnl8ccghb5gqq"]
+
+[ext_resource type="Texture2D" uid="uid://vrtix0h8pcn4" path="res://Menus/Main Menu/BackgroundWithWatermickeymania_wharf_bg-bw.png" id="1_sdpk7"]
+[ext_resource type="Script" path="res://Menus/Credits/Control.gd" id="2_mqaqr"]
+[ext_resource type="FontFile" uid="uid://8cxb8nch4s1p" path="res://Menus/Main Menu/MonkeyFingersNF.ttf" id="3_ohi0c"]
+[ext_resource type="Theme" uid="uid://b74jrni0uw4su" path="res://font.tres" id="4_xku65"]
+
+[sub_resource type="Theme" id="Theme_m1gag"]
+default_font = ExtResource("3_ohi0c")
+default_font_size = 35
+
+[node name="Credits" type="Node2D"]
+
+[node name="BackgroundWithWatermickeymaniaWharfBg-bw" type="Sprite2D" parent="."]
+position = Vector2(649, 366.25)
+scale = Vector2(2.53516, 2.88477)
+texture = ExtResource("1_sdpk7")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1150.0
+offset_bottom = 628.0
+script = ExtResource("2_mqaqr")
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 184.0
+offset_right = 837.0
+offset_bottom = 522.0
+
+[node name="Title" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 463.0
+offset_top = 84.0
+offset_right = 759.0
+offset_bottom = 143.0
+theme = SubResource("Theme_m1gag")
+theme_override_colors/font_color = Color(0.341176, 0.823529, 0.596078, 1)
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Control/Title"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 126.0
+offset_right = 326.0
+offset_bottom = 185.0
+theme = SubResource("Theme_m1gag")
+theme_override_colors/font_color = Color(0.341176, 0.823529, 0.596078, 1)
+text = "Credits goes 
+here"
+
+[node name="BackButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 601.0
+offset_top = 444.0
+offset_right = 687.0
+offset_bottom = 493.0
+theme = ExtResource("4_xku65")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "Back"

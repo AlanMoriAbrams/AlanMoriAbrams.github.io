@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxjfk5dqu2jk2"]
+
+[ext_resource type="FontFile" uid="uid://8cxb8nch4s1p" path="res://Menus/Main Menu/MonkeyFingersNF.ttf" id="1_n1jv5"]
+[ext_resource type="Texture2D" uid="uid://vrtix0h8pcn4" path="res://Menus/Main Menu/BackgroundWithWatermickeymania_wharf_bg-bw.png" id="1_us80t"]
+[ext_resource type="Script" path="res://Menus/HowToPlay/HTPControl.gd" id="2_hj65o"]
+[ext_resource type="Theme" uid="uid://b74jrni0uw4su" path="res://font.tres" id="2_lhjeo"]
+
+[sub_resource type="Theme" id="Theme_s5w28"]
+default_font = ExtResource("1_n1jv5")
+default_font_size = 50
+
+[node name="HowToPlay" type="Node2D"]
+
+[node name="BackgroundWithWatermickeymaniaWharfBg-bw" type="Sprite2D" parent="."]
+position = Vector2(649, 366.25)
+scale = Vector2(2.53516, 2.88477)
+texture = ExtResource("1_us80t")
+
+[node name="HTPControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_hj65o")
+
+[node name="ColorRect" type="ColorRect" parent="HTPControl"]
+layout_mode = 0
+offset_left = 388.0
+offset_top = 229.0
+offset_right = 789.0
+offset_bottom = 464.0
+
+[node name="Title" type="Label" parent="HTPControl"]
+layout_mode = 0
+offset_left = 453.0
+offset_top = 107.0
+offset_right = 734.0
+offset_bottom = 163.0
+theme = SubResource("Theme_s5w28")
+theme_override_colors/font_color = Color(0.341176, 0.823529, 0.596078, 1)
+text = "How To Play"
+
+[node name="Explanation" type="Label" parent="HTPControl"]
+layout_mode = 0
+offset_left = 416.0
+offset_top = 249.0
+offset_right = 779.0
+offset_bottom = 378.0
+theme = ExtResource("2_lhjeo")
+theme_override_colors/font_color = Color(0.101961, 0.270588, 0.188235, 1)
+text = "A - Move to the right
+D - Move to the left
+Space -  Jump
+shift - dash
+rmb - attack"
+
+[node name="BackButton" type="Button" parent="HTPControl"]
+layout_mode = 0
+offset_left = 553.0
+offset_top = 394.0
+offset_right = 639.0
+offset_bottom = 443.0
+theme = ExtResource("2_lhjeo")
+theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
+text = "Back"

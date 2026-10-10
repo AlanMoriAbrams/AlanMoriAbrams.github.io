@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwx64ldp14gxx"]
+
+[ext_resource type="Script" path="res://Parrot.gd" id="1_jim30"]
+[ext_resource type="Texture2D" uid="uid://bfdrgl00omwri" path="res://Enemies/Parrot/Parrot.png" id="2_q7hui"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tyegj"]
+radius = 11.0454
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t6pwq"]
+radius = 20.454
+
+[node name="Parrot" type="CharacterBody2D"]
+scale = Vector2(0.7, 0.7)
+script = ExtResource("1_jim30")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_q7hui")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 5)
+shape = SubResource("CircleShape2D_tyegj")
+disabled = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_t6pwq")
